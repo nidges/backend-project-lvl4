@@ -7,7 +7,8 @@ console.log('server file');
 // this file is NOT in bin in package.json
 
 // const address = 'localhost';
-const port = 5000;
+const port = process.env.PORT || 5000;
+console.log('--->process.env.PORT', process.env.PORT);
 const fastify = getApp();
 
 fastify.listen(port, (err, address) => {
