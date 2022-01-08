@@ -2,9 +2,11 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "task manager",
-  "main": "src/index.js",
+  "main": "server/index.js",
+  "type": "module",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --bail"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --bail",
+    "start": "node server/bin/server.js"
   },
   "repository": {
     "type": "git",
