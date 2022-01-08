@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import getApp from '../index.js';
-import express from 'express';
+import express, {request} from 'express';
+import Fastify from "fastify";
 
 // type module should be deleted from package.json????
 // this file is NOT in bin in package.json
@@ -23,6 +24,12 @@ console.log('--->process.env.PORT', process.env.PORT);
 //     console.log(`server is listening on ${port}`);
 // })
 
-express()
-    .get('/', (req, res) => res.send('hello!!'))
+const fastify = Fastify({
+    logger: true
+})
+
+fastify
+    .get('/', (request, reply) =>  {
+        reply.send('hello!!!!!')
+    })
     .listen(port, () => console.log(`Listening on ${ port }`))
