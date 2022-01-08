@@ -19,6 +19,6 @@ const fastify = getApp();
 //
 //     console.log(`server is listening on ${address}`);
 // })
-fastify.listen(port, () => {
+fastify.listen(5000, () => {
     console.log(`server is listening on ${port}`);
 })
