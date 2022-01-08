@@ -25,12 +25,12 @@ console.log('--->process.env.PORT', process.env.PORT);
 //     console.log(`server is listening on ${port}`);
 // })
 
-const fastify = Fastify({
-    logger: true
-})
+// const fastify = Fastify({
+//     logger: true
+// })
 
-fastify
-    .get('/', (request, reply) =>  {
-        reply.send('hello!!!!!')
-    })
-    .listen(port, address, () => console.log(`Listening on ${ port }`))
+// fastify
+//     .get('/', (request, reply) =>  {
+//         reply.send('hello!!!!!')
+//     })
+getApp().listen(port, address, () => console.log(`Listening on ${ port }`));
