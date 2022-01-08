@@ -9,6 +9,7 @@ import Fastify from "fastify";
 
 // const address = 'localhost';
 const port = process.env.PORT || 5000;
+const address = '0.0.0.0';
 console.log('--->process.env.PORT', process.env.PORT);
 // const fastify = getApp();
 
@@ -32,4 +33,4 @@ fastify
     .get('/', (request, reply) =>  {
         reply.send('hello!!!!!')
     })
-    .listen(port, () => console.log(`Listening on ${ port }`))
+    .listen(port, address, () => console.log(`Listening on ${ port }`))
