@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 import getApp from '../index.js';
+import express from 'express';
 
-console.log('server file');
 // type module should be deleted from package.json????
 // this file is NOT in bin in package.json
 
 // const address = 'localhost';
 const port = process.env.PORT || 5000;
 console.log('--->process.env.PORT', process.env.PORT);
-const fastify = getApp();
+// const fastify = getApp();
 
 // fastify.listen(port, (err, address) => {
 //     if (err) {
@@ -19,6 +19,10 @@ const fastify = getApp();
 //
 //     console.log(`server is listening on ${address}`);
 // })
-fastify.listen(port, () => {
-    console.log(`server is listening on ${port}`);
-})
+// fastify.listen(port, () => {
+//     console.log(`server is listening on ${port}`);
+// })
+
+express()
+    .get('/', (req, res) => res.send('hello!!'))
+    .listen(port, () => console.log(`Listening on ${ port }`))
