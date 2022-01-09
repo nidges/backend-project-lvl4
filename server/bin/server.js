@@ -11,26 +11,15 @@ import Fastify from "fastify";
 const port = process.env.PORT || 5000;
 const address = '0.0.0.0';
 console.log('--->process.env.PORT', process.env.PORT);
-// const fastify = getApp();
+const fastify = getApp();
 
-// fastify.listen(port, (err, address) => {
-//     if (err) {
-//         fastify.log.error(err);
-//         process.exit(1);
-//     }
-//
-//     console.log(`server is listening on ${address}`);
-// })
-// fastify.listen(port, () => {
-//     console.log(`server is listening on ${port}`);
-// })
+fastify.listen(port, address, (err, address) => {
+    if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+    }
 
-// const fastify = Fastify({
-//     logger: true
-// })
+    fastify.log.info(`server is listening on ${address}`);
+})
 
-// fastify
-//     .get('/', (request, reply) =>  {
-//         reply.send('hello!!!!!')
-//     })
-getApp().listen(port, address, () => console.log(`Listening on ${ port }`));
+// getApp().listen(port, address, () => console.log(`Listening on ${ port }`));

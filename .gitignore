@@ -1,6 +1,7 @@
 node_modules/
 .idea/
 .DS_Store
+testing-requests.http
 
 # Ignore test-related files
 /coverage.data

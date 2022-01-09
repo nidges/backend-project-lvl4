@@ -16,4 +16,7 @@ test-coverage:
 test-debug:
 	DEBUG=page-loader NODE_OPTIONS=--experimental-vm-modules npx jest
 
+dev:
+	npm run dev
+
 .PHONY: test

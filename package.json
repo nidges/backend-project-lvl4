@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --bail",
-    "start": "node server/bin/server.js"
+    "start": "node server/bin/server.js",
+    "dev": "nodemon server/bin/server.js"
   },
   "repository": {
     "type": "git",
@@ -23,10 +24,13 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^25.3.4",
-    "jest": "^27.4.7"
+    "jest": "^27.4.7",
+    "nodemon": "^2.0.15"
   },
   "dependencies": {
     "express": "^4.17.2",
-    "fastify": "^3.25.3"
+    "fastify": "^3.25.3",
+    "point-of-view": "^5.0.0",
+    "pug": "^3.0.2"
   }
 }
