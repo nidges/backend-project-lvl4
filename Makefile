@@ -17,6 +17,9 @@ test-debug:
 	DEBUG=page-loader NODE_OPTIONS=--experimental-vm-modules npx jest
 
 dev:
-	npm run dev
+	npm run build
+
+heroku:
+	heroku local -f Procfile.dev
 
 .PHONY: test

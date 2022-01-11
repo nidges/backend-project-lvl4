@@ -3,6 +3,13 @@ node_modules/
 .DS_Store
 testing-requests.http
 
+build/
+dist/
+tmp/
+temp/
+database.sqlite
+.env
+
 # Ignore test-related files
 /coverage.data
 /coverage/

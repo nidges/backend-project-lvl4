@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import getApp from '../index.js';
-import express, {request} from 'express';
 import Fastify from "fastify";
 
 // type module should be deleted from package.json????

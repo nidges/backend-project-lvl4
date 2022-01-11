@@ -6,8 +6,8 @@ import path from 'path';
 import router from './routes/root.js';
 import {fileURLToPath} from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 export default () => {
     const app = Fastify({

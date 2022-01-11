@@ -1,1 +1,2 @@
-web: npm start
+web: npm run devstart
+frontend: npm run dev-build-front
