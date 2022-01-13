@@ -1,29 +1,44 @@
 import Fastify from 'fastify';
-import pointOfView from "point-of-view";
+import pointOfView from 'point-of-view';
 import Pug from 'pug';
 import path from 'path';
+import fastifyStatic from 'fastify-static';
 
 import router from './routes/root.js';
-import {fileURLToPath} from "url";
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const mode = process.env.NODE_ENV || 'development';
+const isProduction = mode === 'production';
+const isDevelopment = mode === 'development';
 
 export default () => {
-    const app = Fastify({
-        logger: true
-    });
+  const app = Fastify({
+    logger: true,
+  });
+  const domain = isDevelopment ? 'http://0.0.0.0:5000' : '';
 
-    app.register(pointOfView, {
-        engine: {
-            pug: Pug
-        },
-        includeViewExtension: true,
-        root: path.join(__dirname, "views"),
-        propertyName: "render",
-    })
+  app.register(pointOfView, {
+    engine: {
+      pug: Pug,
+    },
+    includeViewExtension: true,
+    root: path.join(__dirname, 'views'),
+    propertyName: 'render',
+    defaultContext: {
+      assetPath: (filename) => `${domain}/assets/${filename}`,
+    },
+  });
 
-    router(app);
+  const pathPublic = isProduction
+      ? path.join(__dirname, '..', 'public')
+      : path.join(__dirname, '..', 'dist', 'public');
 
-    return app;
-}
+  app.register(fastifyStatic, {
+    root: pathPublic,
+    prefix: '/assets/',
+    list: true,
+  });
+
+  router(app);
+
+  return app;
+};
