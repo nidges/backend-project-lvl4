@@ -1,10 +1,14 @@
 node_modules/
+dist/
 .idea/
 .DS_Store
 testing-requests.http
+src/bootstrap.min.css
+
+server/helpers
+server/locales/en.js
 
 build/
-dist/
 tmp/
 temp/
 database.sqlite

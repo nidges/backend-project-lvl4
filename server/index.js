@@ -1,22 +1,26 @@
-import Fastify from 'fastify';
-import pointOfView from 'point-of-view';
-import Pug from 'pug';
 import path from 'path';
+
+import Fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 
+import Pug from 'pug';
+import pointOfView from 'point-of-view';
+import i18next from 'i18next';
+import ru from './locales/ru.js';
+import en from './locales/en.js';
+
 import router from './routes/root.js';
+// import getHelpers from './helpers/index.js';
 
 const mode = process.env.NODE_ENV || 'development';
 const isProduction = mode === 'production';
 const isDevelopment = mode === 'development';
 
-export default () => {
-  const app = Fastify({
-    logger: true,
-  });
+const registerViewsPlugin = (fastify) => {
   const domain = isDevelopment ? 'http://0.0.0.0:5000' : '';
+  // const helpers = getHelpers(fastify);
 
-  app.register(pointOfView, {
+  fastify.register(pointOfView, {
     engine: {
       pug: Pug,
     },
@@ -24,21 +28,54 @@ export default () => {
     root: path.join(__dirname, 'views'),
     propertyName: 'render',
     defaultContext: {
-      assetPath: (filename) => `${domain}/assets/${filename}`,
+      // ...helpers,
+      // assetPath: (filename) => `${domain}/assets/${filename}`,
+      // text: (key) => i18next.t(key),
+      text(key) {
+        return i18next.t(key);
+      },
+      assetPath(filename) {
+        return `${domain}/assets/${filename}`;
+      },
     },
   });
+};
 
+const registerStaticPlugin = (fastify) => {
   const pathPublic = isProduction
-      ? path.join(__dirname, '..', 'public')
-      : path.join(__dirname, '..', 'dist', 'public');
+    ? path.join(__dirname, '..', 'public')
+    : path.join(__dirname, '..', 'dist', 'public');
 
-  app.register(fastifyStatic, {
+  fastify.register(fastifyStatic, {
     root: pathPublic,
     prefix: '/assets/',
     list: true,
   });
+};
 
-  router(app);
+const setupLocalization = () => {
+  i18next
+    .init({
+      lng: 'ru',
+      fallbackLng: 'en',
+      // debug: isDevelopment,
+      resources: {
+        ru,
+        en,
+      },
+    });
+};
 
-  return app;
+export default () => {
+  const fastify = Fastify({
+    logger: true,
+  });
+
+  setupLocalization();
+  registerViewsPlugin(fastify);
+  registerStaticPlugin(fastify);
+
+  router(fastify);
+
+  return fastify;
 };

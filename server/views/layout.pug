@@ -1,20 +1,32 @@
 doctype html
 html(lang="en")
     head
-        title Nidges Task Manager
+        title= text('appName')
         meta(charset='UTF-8')
+        meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
         link(rel='stylesheet' href=assetPath('main.css'))
         script(src=assetPath('main.js'))
-    body
-        block content
+    body.d-flex.flex-column.min-vh-100
+        nav.navbar.navbar-expand-lg.sticky-top.navbar-dark.bg-primary.mb-5
+            .container-fluid
+                a.navbar-brand(href="#")= text('appName')
+                button.navbar-toggler(data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent")
+                    span.navbar-toggler-icon
+                .collapse.navbar-collapse(id="navbarSupportedContent")
+                    .container-fluid
+                        ul.navbar-nav.me-auto
+                            li.nav-item
+                                a.nav-link(href="#")= text('layouts.application.users')
+                    ul.navbar-nav.me-auto
+                        li.nav-item
+                            a.nav-link(href="#")= text('layouts.application.signIn')
+                        li.nav-item
+                            a.nav-link(href="#")= text('layouts.application.logOut')
+        .container.wrapper
+            block content
+        footer
 
 
-//        script(src=assetPath('main.js'))
-//        link(href=assetPath('main.css') rel="stylesheet")
-//        meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
-//    body.d-flex.flex-column.min-vh-100
-//        nav.navbar.navbar-expand-lg.navbar-light.bg-light.mb-3
-//            .container-fluid
 //                a.navbar-brand(href=route('root'))= t('appName')
 //                button.navbar-toggler(data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent")
 //                    span.navbar-toggler-icon

@@ -14,12 +14,9 @@ test-coverage:
 	NODE_OPTIONS=--experimental-vm-modules npx jest --coverage --coverageProvider=v8
 
 test-debug:
-	DEBUG=page-loader NODE_OPTIONS=--experimental-vm-modules npx jest
+	DEBUG=tracker NODE_OPTIONS=--experimental-vm-modules npx jest
 
-dev:
+prod:
 	npm run build
-
-heroku:
-	heroku local -f Procfile.dev
 
 .PHONY: test

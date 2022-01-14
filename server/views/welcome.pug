@@ -1,10 +1,14 @@
 extends ./layout.pug
 
 block content
-    div Hello from Hexlet!
-    p Learn how to code here
-    hr
-    div.btn.btn-success  push me!
+    .row.justify-content-center
+        .col.col-md-8
+            .card
+                .card-body
+                    h2.card-title= text('views.welcome.index.hello')
+                    p.lead= text('views.welcome.index.description')
+                    hr
+                    a.btn.btn-primary.btn-lg(href="https://hexlet.io")= text('views.welcome.index.more')
     //
     //.card
     //    .card-body.p-5.bg-light
