@@ -7,7 +7,7 @@ import Pug from 'pug';
 import pointOfView from 'point-of-view';
 import i18next from 'i18next';
 import ru from './locales/ru.js';
-import en from './locales/en.js';
+// import en from './locales/en.js';
 
 import router from './routes/root.js';
 // import getHelpers from './helpers/index.js';
@@ -61,7 +61,6 @@ const setupLocalization = () => {
       // debug: isDevelopment,
       resources: {
         ru,
-        en,
       },
     });
 };

@@ -3,7 +3,6 @@ dist/
 .idea/
 .DS_Store
 testing-requests.http
-src/bootstrap.min.css
 
 server/helpers
 server/locales/en.js
