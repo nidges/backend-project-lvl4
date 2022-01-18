@@ -1,0 +1,20 @@
+extends ../layouts/application
+
+block content
+    table.table.table-striped.table-hover.table-primary
+        thead
+            tr
+                th= text('views.users.id')
+                th= text('views.users.fullName')
+                th= text('views.users.email')
+                th= text('views.users.createdAt')
+            tbody
+                each user in users
+                    tr
+                        td= user.id
+                        td= user.firstName + ' ' + user.lastName
+                        td= user.email
+                        td= user.createdAt
+                else
+                    tr
+                        td.text-center(colspan='5')= text('views.users.empty')

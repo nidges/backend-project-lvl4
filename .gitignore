@@ -4,9 +4,6 @@ dist/
 .DS_Store
 testing-requests.http
 
-server/helpers
-server/locales/en.js
-
 build/
 tmp/
 temp/
