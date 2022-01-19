@@ -38,23 +38,16 @@ const registerViewsPlugin = (app) => {
       pug: Pug,
     },
     includeViewExtension: true,
-    // root: path.join(__dirname, 'views'),
-    // propertyName: 'render',
     templates: path.join(__dirname, '..', 'server', 'views'),
     defaultContext: {
       ...helpers,
-      // assetPath: (filename) => `${domain}/assets/${filename}`,
-      // text: (key) => i18next.t(key),
-      // text(key) {
-      //   return i18next.t(key);
-      // },
       assetPath(filename) {
         return `${domain}/assets/${filename}`;
       },
     },
   });
 
-  // необходимо именно добавлять декоратор, иначе не заработает flash в пуге
+  // необходимо именно добавлять декоратор,а не свойство, иначе не заработает flash в пуге
   app.decorateReply('render', function render(viewPath, locals) {
     this.view(viewPath, { ...locals, reply: this });
   });
@@ -80,7 +73,6 @@ const setupLocalization = () => {
       // debug: isDevelopment,
       resources: {
         ru,
-        // en,
       },
     });
 };
