@@ -1,11 +1,18 @@
+---
+
+root: true
+
+extends:
+  - 'airbnb-base'
+  - 'plugin:jest/recommended'
+
+parser: '@babel/eslint-parser'
+
 env:
   browser: true
   node: true
-extends:
-  - airbnb-base
-parserOptions:
-  ecmaVersion: 13
-  sourceType: module
+  jest: true
+
 rules:
   no-console: 0
   import/extensions: 0

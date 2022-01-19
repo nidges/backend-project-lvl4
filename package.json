@@ -4,7 +4,7 @@
   "description": "task manager",
   "main": "server/index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --bail",
+    "test": "jest",
     "prebuild": "rm -rf dist",
     "build-front": "NODE_ENV=production webpack --mode production",
     "build-db": "cp knexfile.js dist && NODE_ENV=production knex migrate:latest && NODE_ENV=production knex seed:run",
@@ -30,8 +30,10 @@
   "devDependencies": {
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.7",
+    "@babel/eslint-parser": "^7.16.5",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.8",
+    "@jest/globals": "^27.4.6",
     "babel-loader": "^8.2.3",
     "css-loader": "^6.5.1",
     "eslint": "^8.6.0",
@@ -39,6 +41,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^25.3.4",
     "jest": "^27.4.7",
+    "jest-cli": "^27.4.7",
     "nodemon": "^2.0.15",
     "pino-pretty": "^7.3.0",
     "webpack-cli": "^4.9.1"

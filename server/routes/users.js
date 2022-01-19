@@ -49,6 +49,5 @@ export default (app) => {
     .patch('/users/:userId', { name: 'updateUser', preValidation: app.authenticate }, (req, reply) => {
       // если с валидацией все норм в req.user будет юзер который залогинен
       console.log('req.user', req.user);
-
     });
 };
