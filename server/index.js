@@ -108,7 +108,9 @@ const registerMainPlugins = (app) => {
   fastifyPassport.use(new FormStrategy('form', app));
   app.register(fastifyPassport.initialize());
   app.register(fastifyPassport.secureSession());
+  // this one is for 'app.fp' ad then method authenticate() from strategy:
   app.decorate('fp', fastifyPassport);
+  // this one is for { preValidation: app.authenticate }:
   app.decorate('authenticate', (...args) => fastifyPassport.authenticate(
     'form',
     {

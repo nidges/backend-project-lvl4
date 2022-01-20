@@ -8,6 +8,7 @@ block content
                 th= text('views.users.fullName')
                 th= text('views.users.email')
                 th= text('views.users.createdAt')
+                th
             tbody
                 each user in users
                     tr
@@ -15,6 +16,10 @@ block content
                         td= user.firstName + ' ' + user.lastName
                         td= user.email
                         td= user.createdAt
+                        td
+                            a(href=route('updateUserForm', { id: user.id }))= text('views.users.existing.update')
+                            +buttonTo(route('updateUser', { id: user.id }), 'delete')(class='btn btn-link' value=text('views.users.existing.delete'))
+
                 else
                     tr
                         td.text-center(colspan='5')= text('views.users.empty')

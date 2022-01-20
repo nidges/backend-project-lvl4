@@ -22,15 +22,15 @@ module.exports = {
     seeds: getSeeds('development'),
     ...knexSnakeCaseMappers,
   },
-  // test: {
-  //   client: 'sqlite3',
-  //   connection: ':memory:',
-  //   useNullAsDefault: true,
-  //   migrations,
-  //   debug: true,
-  //   ...knexSnakeCaseMappers,
-  //   // seeds: getSeeds('development'),
-  // },
+  test: {
+    client: 'sqlite3',
+    connection: ':memory:',
+    useNullAsDefault: true,
+    migrations,
+    // debug: true,
+    ...knexSnakeCaseMappers,
+    // seeds: getSeeds('test'),
+  },
   // production: {
   //     client: 'pg',
   //     connection: {

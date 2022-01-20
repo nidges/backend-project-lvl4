@@ -14,30 +14,12 @@ export default (app) => {
     })
     .post('/users', async (req, reply) => {
       try {
-        // console.log('req.body', req.body);
-        // console.log('req.query', req.query);
-        // console.log('req.params', req.params);
-        // console.log('req.headers', req.headers);
-        // console.log('req.raw', req.raw);
-        // console.log('req.server', req.server);
-        // console.log('req.id', req.id);
-        // console.log('req.ip', req.ip);
-        // console.log('req.ips', req.ips);
-        // console.log('req.hostname', req.hostname);
-        // console.log('req.protocol', req.protocol);
-        // console.log('req.url', req.url);
-        // console.log('req.routerMethod', req.routerMethod);
-        // console.log('req.routerPath', req.routerPath);
         const user = await app.objection.models.user.fromJson(req.body.data);
         await app.objection.models.user.query().insert(user);
-        // const myUser = await app.objection.models.user.query().where('email', req.body.data.email);
-        // console.log('myUser-------->', myUser.password);
         req.flash('info', i18next.t('flash.users.create.success'));
-        // console.log('----->', reply.flash());
-        reply.redirect(app.reverse('root'));
-        return reply;
+        return reply.redirect(app.reverse('root'));
       } catch ({ data }) {
-        // console.log('errors--->', data);
+        console.log('errors--->', data);
         if (_.get(data, 'email[0].keyword') === 'pattern') {
           data.email[0].message = 'please provide a valid email';
         }
@@ -46,8 +28,56 @@ export default (app) => {
         return reply;
       }
     })
-    .patch('/users/:userId', { name: 'updateUser', preValidation: app.authenticate }, (req, reply) => {
+    .get('/users/:id/edit', { name: 'updateUserForm', preValidation: app.authenticate }, async (req, reply) => {
       // если с валидацией все норм в req.user будет юзер который залогинен
-      console.log('req.user', req.user);
+      if (!req.user) {
+        req.flash('error', i18next.t('flash.authError'));
+        return reply.redirect(app.reverse('root'));
+      }
+
+      if (Number(req.params.id) !== Number(req.user.id)) {
+        req.flash('error', i18next.t('flash.users.update.error'));
+        return reply.redirect(app.reverse('users'));
+      }
+
+      const user = await app.objection.models.user.query().findById(req.user.id);
+      reply.render('users/update', { user });
+      return reply;
+    })
+    .patch('/users/:id', { name: 'updateUser', preValidation: app.authenticate }, async (req, reply) => {
+      // console.log('req.user-------->', req.user);
+      // console.log('req.body.data---->', req.body.data);
+      const { id } = req.user;
+
+      try {
+        const user = await app.objection.models.user.query().findById(id);
+        // const updatedUser = await user.$query().patchAndFetchById(id, req.body.data);
+        await user.$query().patch(req.body.data);
+        req.flash('info', i18next.t('flash.users.update.success'));
+        return reply.redirect(app.reverse('users'));
+      } catch ({ data }) {
+        console.log('errors--->', data);
+        if (_.get(data, 'email[0].keyword') === 'pattern') {
+          data.email[0].message = 'please provide a valid email';
+        }
+        reply.render('users/update', { user: { id, ...req.body.data }, errors: data });
+        return reply;
+      }
+    })
+    .delete('/users/:id', { preValidation: app.authenticate }, async (req, reply) => {
+      // console.log('req.user-------->', req.user);
+      const { id } = req.user;
+
+      try {
+        await app.objection.models.user.query().deleteById(id);
+        await req.logOut();
+
+        req.flash('info', i18next.t('flash.users.delete.success'));
+        return reply.redirect(app.reverse('users'));
+      } catch (err) {
+        console.log('errors---->', err);
+        req.flash('error', i18next.t('flash.users.delete.fail'));
+        return reply.redirect(app.reverse('users'));
+      }
     });
 };

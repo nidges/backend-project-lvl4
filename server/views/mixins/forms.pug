@@ -1,7 +1,7 @@
-mixin formFor(entity = null)
-    form&attributes(attributes)
-        block
-
+//mixin formFor(entity = null)
+//    form&attributes(attributes)
+//        block
+//
 mixin input(entity, propertyName, errors = {})
     - getInputName = (property) => `data[${property}]`
     - getInputId = (property) => `data_${property}`

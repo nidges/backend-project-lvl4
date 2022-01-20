@@ -3,7 +3,7 @@ dist/
 .idea/
 .DS_Store
 testing-requests.http
-test.js
+myfile.js
 
 build/
 tmp/
@@ -14,3 +14,4 @@ database.sqlite
 # Ignore test-related files
 /coverage.data
 /coverage/
+server/seeds/test/

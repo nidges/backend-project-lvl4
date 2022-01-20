@@ -17,6 +17,11 @@
     "predevstart": "npm run dev-build-front && npm run dev-build-db && npm run dev-build-env",
     "devstart": "nodemon --exec babel-node server/bin/server.js"
   },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "<rootDir>/__tests__/helpers/"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nidges/backend-project-lvl4.git"
@@ -34,6 +39,7 @@
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.8",
     "@jest/globals": "^27.4.6",
+    "babel-jest": "^27.4.6",
     "babel-loader": "^8.2.3",
     "css-loader": "^6.5.1",
     "eslint": "^8.6.0",

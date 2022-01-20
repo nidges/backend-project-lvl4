@@ -2,8 +2,8 @@ import i18next from 'i18next';
 import _ from 'lodash';
 
 export default (app) => ({
-  route(name) {
-    return app.reverse(name);
+  route(name, opts = {}) {
+    return app.reverse(name, opts);
   },
   text(key) {
     return i18next.t(key);
