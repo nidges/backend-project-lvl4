@@ -1,0 +1,11 @@
+extends ../layouts/application
+
+block content
+    .card
+        .card-body.p-5
+            h2.card-title= text('views.welcome.index.hello')
+            p.lead= text('views.welcome.index.description')
+            hr
+            a.btn.btn-primary.btn-lg(href="https://hexlet.io")= text('views.welcome.index.more')
+
+

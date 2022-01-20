@@ -1,0 +1,31 @@
+"use strict";
+
+// new changes
+exports.up = knex => knex.schema.createTable('users', table => {
+  // table.increments('id').primary(); it should be primary key by default and 'id' by default
+  table.increments();
+  table.string('email');
+  table.string('password_digest');
+  table.string('first_name');
+  table.string('last_name');
+  table.timestamp('created_at').defaultTo(knex.fn.now());
+  table.timestamp('updated_at').defaultTo(knex.fn.now()); //опция с зоной должна работать в постгресе, проверить
+  // table.timestamp('created_at', { useTz: true }).defaultTo(knex.fn.now());
+  // table.timestamp('updated_at', { useTz: true }).defaultTo(knex.fn.now());
+  // в чем разница? потом проверить. вроде также работает
+  // table.timestamps(true, true);
+}) // .createTable('tasks', (table) => {
+//         table.increments();
+//         table.integer('user_id').references('users.id');
+//         table.timestamps(true, true);
+// })
+; // rollback
+// knex migrate:rollback --all
+
+
+exports.down = knex => knex.schema.dropTableIfExists('users') // .dropTable('tasks');
+; // sqlite3:
+// sqlite3 database.sqlite
+//     .tables
+//     .schema tablename
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NlcnZlci9taWdyYXRpb25zLzIwMjIwMTE1MDk1NzQ2X2NyZWF0ZV9hbGxfdGFibGVzLmpzIl0sIm5hbWVzIjpbImV4cG9ydHMiLCJ1cCIsImtuZXgiLCJzY2hlbWEiLCJjcmVhdGVUYWJsZSIsInRhYmxlIiwiaW5jcmVtZW50cyIsInN0cmluZyIsInRpbWVzdGFtcCIsImRlZmF1bHRUbyIsImZuIiwibm93IiwiZG93biIsImRyb3BUYWJsZUlmRXhpc3RzIl0sIm1hcHBpbmdzIjoiOztBQUFBO0FBQ0FBLE9BQU8sQ0FBQ0MsRUFBUixHQUFjQyxJQUFELElBQ1RBLElBQUksQ0FBQ0MsTUFBTCxDQUFZQyxXQUFaLENBQXdCLE9BQXhCLEVBQWtDQyxLQUFELElBQVc7QUFDcEM7QUFDQUEsRUFBQUEsS0FBSyxDQUFDQyxVQUFOO0FBQ0FELEVBQUFBLEtBQUssQ0FBQ0UsTUFBTixDQUFhLE9BQWI7QUFDQUYsRUFBQUEsS0FBSyxDQUFDRSxNQUFOLENBQWEsaUJBQWI7QUFDQUYsRUFBQUEsS0FBSyxDQUFDRSxNQUFOLENBQWEsWUFBYjtBQUNBRixFQUFBQSxLQUFLLENBQUNFLE1BQU4sQ0FBYSxXQUFiO0FBQ0FGLEVBQUFBLEtBQUssQ0FBQ0csU0FBTixDQUFnQixZQUFoQixFQUE4QkMsU0FBOUIsQ0FBd0NQLElBQUksQ0FBQ1EsRUFBTCxDQUFRQyxHQUFSLEVBQXhDO0FBQ0FOLEVBQUFBLEtBQUssQ0FBQ0csU0FBTixDQUFnQixZQUFoQixFQUE4QkMsU0FBOUIsQ0FBd0NQLElBQUksQ0FBQ1EsRUFBTCxDQUFRQyxHQUFSLEVBQXhDLEVBUm9DLENBVXhDO0FBQ0k7QUFDQTtBQUNBO0FBQ0E7QUFFUCxDQWhCRCxDQURTLENBa0JUO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUF0QkosQyxDQTBCQTtBQUNBOzs7QUFDQVgsT0FBTyxDQUFDWSxJQUFSLEdBQWdCVixJQUFELElBQ1hBLElBQUksQ0FBQ0MsTUFBTCxDQUFZVSxpQkFBWixDQUE4QixPQUE5QixDQURXLENBRVg7QUFGSixDLENBS0E7QUFDQTtBQUNBO0FBQ0EiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBuZXcgY2hhbmdlc1xuZXhwb3J0cy51cCA9IChrbmV4KSA9PiAoXG4gICAga25leC5zY2hlbWEuY3JlYXRlVGFibGUoJ3VzZXJzJywgKHRhYmxlKSA9PiB7XG4gICAgICAgICAgICAvLyB0YWJsZS5pbmNyZW1lbnRzKCdpZCcpLnByaW1hcnkoKTsgaXQgc2hvdWxkIGJlIHByaW1hcnkga2V5IGJ5IGRlZmF1bHQgYW5kICdpZCcgYnkgZGVmYXVsdFxuICAgICAgICAgICAgdGFibGUuaW5jcmVtZW50cygpO1xuICAgICAgICAgICAgdGFibGUuc3RyaW5nKCdlbWFpbCcpO1xuICAgICAgICAgICAgdGFibGUuc3RyaW5nKCdwYXNzd29yZF9kaWdlc3QnKTtcbiAgICAgICAgICAgIHRhYmxlLnN0cmluZygnZmlyc3RfbmFtZScpO1xuICAgICAgICAgICAgdGFibGUuc3RyaW5nKCdsYXN0X25hbWUnKTtcbiAgICAgICAgICAgIHRhYmxlLnRpbWVzdGFtcCgnY3JlYXRlZF9hdCcpLmRlZmF1bHRUbyhrbmV4LmZuLm5vdygpKTtcbiAgICAgICAgICAgIHRhYmxlLnRpbWVzdGFtcCgndXBkYXRlZF9hdCcpLmRlZmF1bHRUbyhrbmV4LmZuLm5vdygpKTtcblxuICAgICAgICAvL9C+0L/RhtC40Y8g0YEg0LfQvtC90L7QuSDQtNC+0LvQttC90LAg0YDQsNCx0L7RgtCw0YLRjCDQsiDQv9C+0YHRgtCz0YDQtdGB0LUsINC/0YDQvtCy0LXRgNC40YLRjFxuICAgICAgICAgICAgLy8gdGFibGUudGltZXN0YW1wKCdjcmVhdGVkX2F0JywgeyB1c2VUejogdHJ1ZSB9KS5kZWZhdWx0VG8oa25leC5mbi5ub3coKSk7XG4gICAgICAgICAgICAvLyB0YWJsZS50aW1lc3RhbXAoJ3VwZGF0ZWRfYXQnLCB7IHVzZVR6OiB0cnVlIH0pLmRlZmF1bHRUbyhrbmV4LmZuLm5vdygpKTtcbiAgICAgICAgICAgIC8vINCyINGH0LXQvCDRgNCw0LfQvdC40YbQsD8g0L/QvtGC0L7QvCDQv9GA0L7QstC10YDQuNGC0YwuINCy0YDQvtC00LUg0YLQsNC60LbQtSDRgNCw0LHQvtGC0LDQtdGCXG4gICAgICAgICAgICAvLyB0YWJsZS50aW1lc3RhbXBzKHRydWUsIHRydWUpO1xuXG4gICAgfSlcbiAgICAvLyAuY3JlYXRlVGFibGUoJ3Rhc2tzJywgKHRhYmxlKSA9PiB7XG4gICAgLy8gICAgICAgICB0YWJsZS5pbmNyZW1lbnRzKCk7XG4gICAgLy8gICAgICAgICB0YWJsZS5pbnRlZ2VyKCd1c2VyX2lkJykucmVmZXJlbmNlcygndXNlcnMuaWQnKTtcbiAgICAvLyAgICAgICAgIHRhYmxlLnRpbWVzdGFtcHModHJ1ZSwgdHJ1ZSk7XG4gICAgLy8gfSlcbik7XG5cblxuLy8gcm9sbGJhY2tcbi8vIGtuZXggbWlncmF0ZTpyb2xsYmFjayAtLWFsbFxuZXhwb3J0cy5kb3duID0gKGtuZXgpID0+IChcbiAgICBrbmV4LnNjaGVtYS5kcm9wVGFibGVJZkV4aXN0cygndXNlcnMnKVxuICAgIC8vIC5kcm9wVGFibGUoJ3Rhc2tzJyk7XG4pO1xuXG4vLyBzcWxpdGUzOlxuLy8gc3FsaXRlMyBkYXRhYmFzZS5zcWxpdGVcbi8vICAgICAudGFibGVzXG4vLyAgICAgLnNjaGVtYSB0YWJsZW5hbWVcblxuIl19

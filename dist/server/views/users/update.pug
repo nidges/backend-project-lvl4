@@ -1,0 +1,13 @@
+extends ../layouts/application
+
+block header
+    = text('views.users.existing.updateTitle')
+
+block content
+    form(action=route('updateUser', { id: user.id }) method='post')
+        +input(user, 'email', errors)(type="text")
+        +input(user, 'password', errors)(type="password")
+        +input(user, 'firstName', errors)(type="text")
+        +input(user, 'lastName', errors)(type="text")
+        input(name="_method" type="hidden" value='patch')
+        +submit(user)(value=text('views.users.existing.update'))
