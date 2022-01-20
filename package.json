@@ -6,10 +6,11 @@
   "scripts": {
     "test": "jest",
     "prebuild": "rm -rf dist",
+    "build-configs": "babel webpack.config.babel.js --out-dir dist",
     "build-front": "NODE_ENV=production webpack --mode production",
     "build-db": "cp knexfile.js dist && NODE_ENV=production knex migrate:latest && NODE_ENV=production knex seed:run",
     "build-server": "NODE_ENV=production babel server --out-dir dist/server --source-maps inline --copy-files",
-    "build": "npm run build-server && npm run build-front && npm run build-db",
+    "build": "npm run build-configs && npm run build-server && npm run build-front && npm run build-db",
     "start": "NODE_ENV=production node dist/server/bin/server.js",
     "dev-build-front": "webpack",
     "dev-build-db": "NODE_ENV=development knex migrate:rollback --all && knex migrate:latest && knex seed:run",

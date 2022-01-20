@@ -7,9 +7,12 @@ exports.up = (knex) => (
             table.string('password_digest');
             table.string('first_name');
             table.string('last_name');
-            //опция с зоной должна работать в постгресе, проверить
-            table.timestamp('created_at', { useTz: true }).defaultTo(knex.fn.now());
-            table.timestamp('updated_at', { useTz: true }).defaultTo(knex.fn.now());
+            table.timestamp('created_at').defaultTo(knex.fn.now());
+            table.timestamp('updated_at').defaultTo(knex.fn.now());
+
+        //опция с зоной должна работать в постгресе, проверить
+            // table.timestamp('created_at', { useTz: true }).defaultTo(knex.fn.now());
+            // table.timestamp('updated_at', { useTz: true }).defaultTo(knex.fn.now());
             // в чем разница? потом проверить. вроде также работает
             // table.timestamps(true, true);
 
