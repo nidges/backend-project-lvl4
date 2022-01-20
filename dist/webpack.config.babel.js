@@ -9,6 +9,8 @@ var _path = _interopRequireDefault(require("path"));
 
 var _miniCssExtractPlugin = _interopRequireDefault(require("mini-css-extract-plugin"));
 
+var _dotenvWebpack = _interopRequireDefault(require("dotenv-webpack"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const mode = process.env.NODE_ENV || 'development';
@@ -45,6 +47,8 @@ var _default = {
       }]
     }]
   },
-  plugins: [new _miniCssExtractPlugin.default()]
+  plugins: [new _miniCssExtractPlugin.default(), new _dotenvWebpack.default({
+    systemvars: true
+  })]
 };
 exports.default = _default;
