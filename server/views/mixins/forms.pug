@@ -3,9 +3,9 @@
 //        block
 //
 mixin input(entity, propertyName, errors = {})
+    // - getLabelForUser = (propertyName) => text(`views.users.${propertyName}`)
     - getInputName = (property) => `data[${property}]`
     - getInputId = (property) => `data_${property}`
-    - getLabelForUser = (propertyName) => text(`views.users.${propertyName}`)
     - propertyErrors = _.get(errors, propertyName)
     - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
     - inputId = getInputId(propertyName)
@@ -13,7 +13,10 @@ mixin input(entity, propertyName, errors = {})
     .mb-3(class=(errors[propertyName] && 'has-danger'))
         label.form-label(
             for= inputId
-        )= getLabelForUser(propertyName)
+        )= getLabelForEntity(entity, propertyName)
+        //label.form-label(
+        //    for= inputId
+        //)= getLabelForUser(propertyName)
         input(
             id= inputId
             name=getInputName(propertyName)

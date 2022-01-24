@@ -34,11 +34,11 @@ describe('test session', () => {
     // после успешной аутентификации получаем куки из ответа,
     // они понадобятся для выполнения запросов на маршруты требующие
     // предварительную аутентификацию
-    console.log('responseSignIn.cookies--->', responseSignIn.cookies);
+    // console.log('responseSignIn.cookies--->', responseSignIn.cookies);
     const [sessionCookie] = responseSignIn.cookies;
     const { name, value } = sessionCookie;
     const cookie = { [name]: value };
-    console.log('cookie--->', cookie);
+    // console.log('cookie--->', cookie);
 
     const responseSignOut = await app.inject({
       method: 'DELETE',

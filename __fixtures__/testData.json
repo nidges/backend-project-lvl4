@@ -18,5 +18,16 @@
       "firstName": "Helena",
       "lastName": "Hunt"
     }
+  },
+  "statuses": {
+    "new": {
+      "name": "very new status"
+    },
+    "existing": {
+      "name": "new status"
+    },
+    "updated": {
+      "name": "new status updated"
+    }
   }
 }

@@ -1,0 +1,24 @@
+extends ../layouts/application
+
+block content
+    a.nav-link(href=route('newStatus'))= text('views.statuses.new.create')
+    table.table.table-striped.table-hover.table-primary
+        thead
+            tr
+                th= text('views.statuses.id')
+                th= text('views.statuses.name')
+                th= text('views.statuses.createdAt')
+                th
+            tbody
+                each status in statuses
+                    tr
+                        td= status.id
+                        td= status.name
+                        td= status.createdAt
+                        td
+                            a(href=route('updateStatusForm', { id: status.id }))= text('views.statuses.existing.update')
+                            +buttonTo(route('updateStatus', { id: status.id }), 'delete')(class='btn btn-link' value=text('views.statuses.existing.delete'))
+
+                else
+                    tr
+                        td.text-center(colspan='4')= text('views.statuses.empty')

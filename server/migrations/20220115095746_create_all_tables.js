@@ -1,6 +1,7 @@
 // new changes
 exports.up = (knex) => (
-    knex.schema.createTable('users', (table) => {
+    knex.schema
+        .createTable('users', (table) => {
             // table.increments('id').primary(); it should be primary key by default and 'id' by default
             table.increments();
             table.string('email');
@@ -9,14 +10,19 @@ exports.up = (knex) => (
             table.string('last_name');
             table.timestamp('created_at').defaultTo(knex.fn.now());
             table.timestamp('updated_at').defaultTo(knex.fn.now());
-
-        //опция с зоной должна работать в постгресе, проверить
+            // table.timestamps(true, false); // так пусто
+            //опция с зоной должна работать в постгресе, проверить
             // table.timestamp('created_at', { useTz: true }).defaultTo(knex.fn.now());
             // table.timestamp('updated_at', { useTz: true }).defaultTo(knex.fn.now());
             // в чем разница? потом проверить. вроде также работает
             // table.timestamps(true, true);
 
-    })
+        })
+        .createTable('statuses', (table) => {
+            table.increments();
+            table.string('name');
+            table.timestamps(true, true);
+        })
     // .createTable('tasks', (table) => {
     //         table.increments();
     //         table.integer('user_id').references('users.id');
@@ -28,7 +34,9 @@ exports.up = (knex) => (
 // rollback
 // knex migrate:rollback --all
 exports.down = (knex) => (
-    knex.schema.dropTableIfExists('users')
+    knex.schema
+        .dropTableIfExists('users')
+        .dropTableIfExists('statuses')
     // .dropTable('tasks');
 );
 

@@ -19,6 +19,11 @@ html(lang="en")
                         ul.navbar-nav.me-auto
                             li.nav-item
                                 a.nav-link(href=route('users'))= text('layouts.application.users')
+                            //li.nav-item
+                            //    a.nav-link(href=route('statuses'))= text('layouts.application.statuses')
+                            if isAuthenticated()
+                                li.nav-item
+                                    a.nav-link(href=route('statuses'))= text('layouts.application.statuses')
                     ul.navbar-nav.me-auto
                         if isAuthenticated()
                             li.nav-item

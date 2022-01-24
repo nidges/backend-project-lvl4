@@ -10,7 +10,7 @@ fix:
 test:
 	npx jest
 
-test-coverage:
+coverage:
 	npx jest --coverage --coverageProvider=v8
 
 test-debug:
@@ -19,4 +19,4 @@ test-debug:
 prod:
 	npm run build
 
-.PHONY: test
+.PHONY: test coverage

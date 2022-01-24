@@ -10,6 +10,7 @@ export default (app) => {
     })
     .get('/users/new', { name: 'newUser' }, (req, reply) => {
       const user = new app.objection.models.user();
+      // console.log('user.constructor.name--->', user.constructor.name);
       reply.render('users/new', { user });
     })
     .post('/users', async (req, reply) => {
@@ -30,10 +31,10 @@ export default (app) => {
     })
     .get('/users/:id/edit', { name: 'updateUserForm', preValidation: app.authenticate }, async (req, reply) => {
       // если с валидацией все норм в req.user будет юзер который залогинен
-      if (!req.user) {
-        req.flash('error', i18next.t('flash.authError'));
-        return reply.redirect(app.reverse('root'));
-      }
+      // if (!req.user) {
+      //   req.flash('error', i18next.t('flash.authError'));
+      //   return reply.redirect(app.reverse('root'));
+      // }
 
       if (Number(req.params.id) !== Number(req.user.id)) {
         req.flash('error', i18next.t('flash.users.update.error'));
@@ -67,6 +68,11 @@ export default (app) => {
     .delete('/users/:id', { preValidation: app.authenticate }, async (req, reply) => {
       // console.log('req.user-------->', req.user);
       const { id } = req.user;
+
+      if (Number(req.params.id) !== Number(id)) {
+        req.flash('error', i18next.t('flash.users.delete.error'));
+        return reply.redirect(app.reverse('users'));
+      }
 
       try {
         await app.objection.models.user.query().deleteById(id);

@@ -1,0 +1,10 @@
+extends ../layouts/application
+
+block header
+    = text('views.statuses.new.creation')
+
+block content
+    form(action=route('statuses') method='post')
+        +input(status, 'name', errors)(type="text")
+        +submit(status)(value=text('views.statuses.new.submit'))
+

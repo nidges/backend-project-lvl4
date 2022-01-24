@@ -1,6 +1,7 @@
 const path = require('path');
 const knexSnakeCaseMappers = require('objection');
 const dotenv = require('dotenv');
+
 dotenv.config();
 // console.log('process.env.DATABASE_URL', process.env.DATABASE_URL);
 
@@ -52,6 +53,6 @@ module.exports = {
     ...knexSnakeCaseMappers,
     // ssl: { rejectUnauthorized: false },
     // ssl: false,
-      // ?sslmode=require
+    // ?sslmode=require
   },
 };

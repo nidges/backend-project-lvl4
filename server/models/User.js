@@ -39,4 +39,8 @@ export default class User extends unique(Model) {
   verifyPassword(password) {
     return encrypt(password) === this.passwordDigest;
   }
+
+  // getModelName() {
+  //   return 'user';
+  // }
 }
