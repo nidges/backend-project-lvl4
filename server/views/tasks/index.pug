@@ -1,0 +1,31 @@
+extends ../layouts/application
+
+block content
+    a.nav-link(href=route('newTask'))= text('views.tasks.new.create')
+    table.table.table-striped.table-hover.table-primary
+        thead
+            tr
+                th= text('views.tasks.id')
+                th= text('views.tasks.name')
+                th= text('views.tasks.status')
+                th= text('views.tasks.creator')
+                th= text('views.tasks.executor')
+                th= text('views.tasks.createdAt')
+                th
+            tbody
+                each task in tasks
+                    tr
+                        td= task.id
+                        td
+                            a(href=route('viewTask', { id: task.id }))= task.name
+                        td= task.status.name
+                        td= task.creator.name
+                        td= _.get(task.executor, 'name', '')
+                        td= task.createdAt
+                        td
+                            a(href=route('updateTaskForm', { id: task.id }))= text('views.tasks.existing.update')
+                            +buttonTo(route('updateTask', { id: task.id }), 'delete')(class='btn btn-link' value=text('views.tasks.existing.delete'))
+
+                else
+                    tr
+                        td.text-center(colspan='7')= text('views.tasks.empty')

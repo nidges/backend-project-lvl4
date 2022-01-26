@@ -2,7 +2,7 @@ import i18next from 'i18next';
 
 export default (app) => {
   app
-    .get('/statuses', { name: 'statuses' }, async (req, reply) => {
+    .get('/statuses', { name: 'statuses', preValidation: app.authenticate }, async (req, reply) => {
       const statuses = await app.objection.models.status.query();
       reply.render('statuses/index', { statuses });
       return reply;
@@ -11,7 +11,7 @@ export default (app) => {
       const status = new app.objection.models.status();
       reply.render('statuses/new', { status });
     })
-    .post('/statuses', async (req, reply) => {
+    .post('/statuses', { preValidation: app.authenticate }, async (req, reply) => {
       try {
         const status = await app.objection.models.status.fromJson(req.body.data);
         await app.objection.models.status.query().insert(status);
@@ -47,10 +47,15 @@ export default (app) => {
     })
     .delete('/statuses/:id', { preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
+      const tasksInStatus = await app.objection.models.task.query().where('statusId', id);
+
+      if (tasksInStatus.length !== 0) {
+        req.flash('error', i18next.t('flash.statuses.delete.error'));
+        return reply.redirect(app.reverse('statuses'));
+      }
 
       try {
         await app.objection.models.status.query().deleteById(id);
-        // await req.logOut();
 
         req.flash('info', i18next.t('flash.statuses.delete.success'));
         return reply.redirect(app.reverse('statuses'));

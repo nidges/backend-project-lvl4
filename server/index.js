@@ -132,7 +132,7 @@ export default () => {
     // logger: {
     //   prettyPrint: isDevelopment,
     // },
-    // logger: true,
+    logger: true,
   });
 
   registerMainPlugins(app);

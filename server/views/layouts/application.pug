@@ -23,6 +23,8 @@ html(lang="en")
                             //    a.nav-link(href=route('statuses'))= text('layouts.application.statuses')
                             if isAuthenticated()
                                 li.nav-item
+                                    a.nav-link(href=route('tasks'))= text('layouts.application.tasks')
+                                li.nav-item
                                     a.nav-link(href=route('statuses'))= text('layouts.application.statuses')
                     ul.navbar-nav.me-auto
                         if isAuthenticated()

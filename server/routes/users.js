@@ -66,11 +66,18 @@ export default (app) => {
       }
     })
     .delete('/users/:id', { preValidation: app.authenticate }, async (req, reply) => {
-      // console.log('req.user-------->', req.user);
       const { id } = req.user;
 
-      if (Number(req.params.id) !== Number(id)) {
+      if (Number(req.params.id) !== id) {
         req.flash('error', i18next.t('flash.users.delete.error'));
+        return reply.redirect(app.reverse('users'));
+      }
+
+      const createdTasks = await app.objection.models.task.query().where('creatorId', id);
+      const assignedTasks = await app.objection.models.task.query().where('executorId', id);
+
+      if (createdTasks.length !== 0 || assignedTasks.length !== 0) {
+        req.flash('error', i18next.t('flash.users.delete.fail'));
         return reply.redirect(app.reverse('users'));
       }
 

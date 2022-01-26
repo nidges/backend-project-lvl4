@@ -17,6 +17,12 @@
       "password": "RLK75IgPOnX53asFf",
       "firstName": "Helena",
       "lastName": "Hunt"
+    },
+    "existingEmpty": {
+      "email": "nona_murray@yahoo.com",
+      "password": "password",
+      "firstName": "Lara",
+      "lastName": "Croft"
     }
   },
   "statuses": {
@@ -28,6 +34,30 @@
     },
     "updated": {
       "name": "new status updated"
+    },
+    "existingEmpty": {
+      "name": "status without tasks"
+    }
+  },
+  "tasks": {
+    "new": {
+      "name": "this is a new task",
+      "description": "some description",
+      "statusId": 1,
+      "executorId": 1
+    },
+    "existing": {
+      "name": "finish the project",
+      "description": "4 steps left",
+      "statusId": 2,
+      "creatorId": 2,
+      "executorId": 1
+    },
+    "updated": {
+      "name": "finish the project ASAP!!!",
+      "description": "4 steps left",
+      "statusId": 2,
+      "executorId": 1
     }
   }
 }

@@ -1,9 +1,7 @@
-import _ from 'lodash';
 import getApp from '../server/index.js';
-import encrypt from '../server/lib/secure.js';
 import { authenticate, getTestData, prepareData } from './helpers';
 
-describe('test users CRUD', () => {
+describe('test tasks CRUD', () => {
   let app;
   let knex;
   let models;
@@ -30,7 +28,19 @@ describe('test users CRUD', () => {
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('users'),
+      url: app.reverse('tasks'),
+      cookies,
+    });
+
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('view', async () => {
+    const { id } = await models.task.query().findOne('id', '>', 0);
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('viewTask', { id }),
+      cookies,
     });
 
     expect(response.statusCode).toBe(200);
@@ -39,47 +49,46 @@ describe('test users CRUD', () => {
   it('new', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newUser'),
+      url: app.reverse('newTask'),
+      cookies,
     });
 
     expect(response.statusCode).toBe(200);
   });
 
   it('create', async () => {
-    const params = testData.users.new;
+    const params = testData.tasks.new;
     const response = await app.inject({
       method: 'POST',
-      url: app.reverse('users'),
+      url: app.reverse('tasks'),
       payload: {
         data: params,
       },
+      cookies,
     });
 
     expect(response.statusCode).toBe(302);
-    const expected = {
-      ..._.omit(params, 'password'),
-      passwordDigest: encrypt(params.password),
-    };
-    const user = await models.user.query().findOne({ email: params.email });
-    expect(user).toMatchObject(expected);
+
+    const task = await models.task.query().findById(4);
+    expect(task).toMatchObject(params);
   });
 
   it('update', async () => {
-    const oldParams = testData.users.existing;
-    const newParams = testData.users.updated;
+    const oldParams = testData.tasks.existing;
+    const newParams = testData.tasks.updated;
     // findOne выдает один объект, where выдает массив объектов
-    const { id } = await models.user.query().findOne('email', oldParams.email);
+    const { id } = await models.task.query().findOne('name', oldParams.name);
 
     const responseForm = await app.inject({
       method: 'GET',
-      url: app.reverse('updateUserForm', { id }),
+      url: app.reverse('updateTaskForm', { id }),
       cookies,
     });
     expect(responseForm.statusCode).toBe(200);
 
     const responseUpdate = await app.inject({
       method: 'PATCH',
-      url: app.reverse('updateUser', { id }),
+      url: app.reverse('updateTask', { id }),
       payload: {
         data: newParams,
       },
@@ -87,28 +96,23 @@ describe('test users CRUD', () => {
     });
     expect(responseUpdate.statusCode).toBe(302);
 
-    const expected = {
-      ..._.omit(newParams, 'password'),
-      passwordDigest: encrypt(newParams.password),
-    };
-    const user = await models.user.query().findById(id);
-    expect(user).toMatchObject(expected);
+    const task = await models.task.query().findById(id);
+    expect(task).toMatchObject(newParams);
   });
 
   it('delete', async () => {
-    cookies = await authenticate(app, testData.users.existingEmpty);
-    const params = testData.users.existingEmpty;
-    const { id } = await models.user.query().findOne('email', params.email);
+    const params = testData.tasks.existing;
+    const { id } = await models.task.query().findOne('name', params.name);
 
     const response = await app.inject({
       method: 'DELETE',
-      url: app.reverse('updateUser', { id }),
+      url: app.reverse('updateTask', { id }),
       cookies,
     });
 
     expect(response.statusCode).toBe(302);
 
-    expect(await models.user.query().findById(id)).toBeUndefined();
+    expect(await models.task.query().findById(id)).toBeUndefined();
   });
 
   afterEach(async () => {

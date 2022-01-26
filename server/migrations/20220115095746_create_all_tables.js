@@ -23,11 +23,18 @@ exports.up = (knex) => (
             table.string('name');
             table.timestamps(true, true);
         })
-    // .createTable('tasks', (table) => {
-    //         table.increments();
-    //         table.integer('user_id').references('users.id');
-    //         table.timestamps(true, true);
-    // })
+        .createTable('tasks', (table) => {
+            table.increments();
+            table.string('name');
+            table.string('description');
+            // table.integer('status_id').references('id').inTable('statuses');
+            // table.integer('creator_id').references('id').inTable('users');
+            // table.integer('executor_id').references('id').inTable('users');
+            table.integer('status_id').references('statuses.id');
+            table.integer('creator_id').references('users.id');
+            table.integer('executor_id').references('users.id');
+            table.timestamps(true, true);
+        })
 );
 
 
@@ -35,9 +42,9 @@ exports.up = (knex) => (
 // knex migrate:rollback --all
 exports.down = (knex) => (
     knex.schema
+        .dropTableIfExists('tasks')
         .dropTableIfExists('users')
         .dropTableIfExists('statuses')
-    // .dropTable('tasks');
 );
 
 // sqlite3:

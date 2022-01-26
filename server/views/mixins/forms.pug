@@ -1,11 +1,13 @@
 //mixin formFor(entity = null)
 //    form&attributes(attributes)
 //        block
-//
+- getInputName = (property) => `data[${property}]`
+- getInputId = (property) => `data_${property}`
+- isSelected = (property, selectionId) => Number(property) === selectionId
+
 mixin input(entity, propertyName, errors = {})
-    // - getLabelForUser = (propertyName) => text(`views.users.${propertyName}`)
-    - getInputName = (property) => `data[${property}]`
-    - getInputId = (property) => `data_${property}`
+    // - getInputName = (property) => `data[${property}]`
+    // - getInputId = (property) => `data_${property}`
     - propertyErrors = _.get(errors, propertyName)
     - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
     - inputId = getInputId(propertyName)
@@ -13,10 +15,7 @@ mixin input(entity, propertyName, errors = {})
     .mb-3(class=(errors[propertyName] && 'has-danger'))
         label.form-label(
             for= inputId
-        )= getLabelForEntity(entity, propertyName)
-        //label.form-label(
-        //    for= inputId
-        //)= getLabelForUser(propertyName)
+        )= getLabel(propertyName)
         input(
             id= inputId
             name=getInputName(propertyName)
@@ -25,6 +24,37 @@ mixin input(entity, propertyName, errors = {})
         )&attributes(attributes)
         if !_.isEmpty(propertyErrors)
             .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
+
+mixin textarea(entity, propertyName)
+    - inputId = getInputId(propertyName)
+    .mb-3
+        label.form-label(
+            for= inputId
+        )= getLabel(propertyName)
+        textarea.form-control(
+            id= inputId
+            name=getInputName(propertyName)
+            rows='3'
+        )&attributes(attributes)=_.get(entity, propertyName, '')
+
+mixin select(entity, selection, propertyName, errors = {})
+    - inputId = getInputId(propertyName)
+    - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
+    - propertyErrors = _.get(errors, propertyName)
+    .mb-3(class=(errors[propertyName] && 'has-danger'))
+        label.form-label(
+            for= inputId
+        )= getLabel(propertyName)
+        select(
+            id= inputId
+            name=getInputName(propertyName)
+            class=classLine
+        )&attributes(attributes)
+            option
+            each item in selection
+                option(value=item.id selected=isSelected(entity[propertyName], item.id))= item.name
+        if !_.isEmpty(propertyErrors)
+            .invalid-feedback= propertyErrors.map(({message}) => message).join('. ')
 
 mixin submit(form = null)
     input(class='btn btn-primary' type='submit')&attributes(attributes)

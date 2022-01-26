@@ -10,5 +10,8 @@
   },
   {
     "name": "task is closed"
+  },
+  {
+    "name": "status without tasks"
   }
 ]

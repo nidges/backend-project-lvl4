@@ -1,5 +1,6 @@
 import { Model } from 'objection';
 import objectionUnique from 'objection-unique';
+import path from 'path';
 import encrypt from '../lib/secure.js';
 
 // import Ajv from 'ajv';
@@ -32,6 +33,27 @@ export default class User extends unique(Model) {
     };
   }
 
+  static get relationMappings() {
+    return {
+      createdTasks: {
+        relation: Model.HasManyRelation,
+        modelClass: path.join(__dirname, 'Task'),
+        join: {
+          from: 'users.id',
+          to: 'tasks.creatorId',
+        },
+      },
+      executedTasks: {
+        relation: Model.HasManyRelation,
+        modelClass: path.join(__dirname, 'Task'),
+        join: {
+          from: 'users.id',
+          to: 'tasks.executorId',
+        },
+      },
+    };
+  }
+
   set password(value) {
     this.passwordDigest = encrypt(value);
   }
@@ -40,7 +62,10 @@ export default class User extends unique(Model) {
     return encrypt(password) === this.passwordDigest;
   }
 
-  // getModelName() {
-  //   return 'user';
+  // fullName() {
+  //   return this.firstName + ' ' + this.lastName;
   // }
+  get name() {
+    return `${this.firstName} ${this.lastName}`;
+  }
 }

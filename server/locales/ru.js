@@ -2,6 +2,7 @@ module.exports = {
   translation: {
     appName: 'Nidges Task Manager',
     flash: {
+      authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
       session: {
         create: {
           success: 'Вы залогинены',
@@ -40,18 +41,40 @@ module.exports = {
           error: 'Не удалось удалить статус',
         },
       },
-      authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
+      tasks: {
+        create: {
+          success: 'Задача успешно создана',
+          error: 'Не удалось создать задачу',
+        },
+        update: {
+          success: 'Задача успешно изменена',
+          error: 'Не удалось изменить задачу',
+        },
+        delete: {
+          success: 'Задача успешно удалена',
+          error: 'Не удалось удалить задачу',
+          fail: 'Задачу может удалить только её автор',
+        },
+      },
     },
     layouts: {
       application: {
         users: 'Пользователи',
         statuses: 'Статусы',
+        tasks: 'Задачи',
         signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выход',
       },
     },
     views: {
+      welcome: {
+        index: {
+          hello: 'Привет от Хекслета!',
+          description: 'Практические курсы по программированию',
+          more: 'Узнать Больше',
+        },
+      },
       session: {
         new: {
           signIn: 'Вход',
@@ -77,13 +100,6 @@ module.exports = {
           updateTitle: 'Изменение пользователя',
         },
       },
-      welcome: {
-        index: {
-          hello: 'Привет от Хекслета!',
-          description: 'Практические курсы по программированию',
-          more: 'Узнать Больше',
-        },
-      },
       statuses: {
         id: 'ID',
         name: 'Наименование',
@@ -100,6 +116,36 @@ module.exports = {
           updateTitle: 'Изменение статуса',
         },
       },
+      tasks: {
+        id: 'ID',
+        name: 'Наименование',
+        status: 'Статус',
+        creator: 'Автор',
+        executor: 'Исполнитель',
+        createdAt: 'Дата создания',
+        empty: 'Нет созданных задач',
+        new: {
+          create: 'Создать задачу',
+          creation: 'Создание задачи',
+        },
+        existing: {
+          update: 'Изменить',
+          delete: 'Удалить',
+          updateTitle: 'Изменение задачи',
+        },
+      },
+    },
+    labels: {
+      email: 'Email',
+      password: 'Пароль',
+      firstName: 'Имя',
+      lastName: 'Фамилия',
+      name: 'Наименование',
+      description: 'Описание',
+      statusId: 'Статус',
+      creatorId: 'Автор',
+      executorId: 'Исполнитель',
+      createdAt: 'Дата создания',
     },
   },
 };

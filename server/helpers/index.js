@@ -30,11 +30,16 @@ export default (app) => ({
     const date = new Date(str);
     return date.toLocaleString();
   },
-  getLabelForEntity(entity, propertyName) {
-    const mapping = {
-      user: 'users',
-      status: 'statuses',
-    };
-    return i18next.t(`views.${mapping[entity.constructor.name.toLowerCase()]}.${propertyName}`);
+  // getLabelForEntity(entity, propertyName) {
+  //   console.log('entity--->', entity);
+  //   console.log('propertyName--->', propertyName);
+  //   const mapping = {
+  //     user: 'users',
+  //     status: 'statuses',
+  //   };
+  //   return i18next.t(`views.${mapping[entity.constructor.name.toLowerCase()]}.${propertyName}`);
+  // },
+  getLabel(propertyName) {
+    return i18next.t(`labels.${propertyName}`);
   },
 });

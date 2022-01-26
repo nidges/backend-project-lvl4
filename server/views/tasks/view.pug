@@ -1,0 +1,27 @@
+extends ../layouts/application
+
+block content
+    .card.bg-primary
+        .card-header.text-white
+            h2= task.name
+        .card-body
+            p= task.description
+            hr
+            .container
+                .row.p-1
+                    .col= getLabel('creatorId')
+                    .col= task.creator.name
+                .row.p-1
+                    .col= getLabel('executorId')
+                    .col= _.get(task.executor, 'name', '')
+                .row.p-1
+                    .col= getLabel('statusId')
+                    .col= task.status.name
+                .row.p-1
+                    .col= getLabel('createdAt')
+                    .col= task.createdAt
+                .row.p-1
+                    .col
+                        a(href=route('updateTaskForm', {id: task.id}))= text('views.tasks.existing.update')
+                        +buttonTo(route('updateTask', {id: task.id}), 'delete')(class='btn btn-link' value=text('views.tasks.existing.delete'))
+

@@ -20,7 +20,7 @@ describe('test statuses CRUD', () => {
     // и заполняем БД тестовыми данными
     await knex.migrate.latest();
     await prepareData(app);
-    cookies = await authenticate(app, testData);
+    cookies = await authenticate(app, testData.users.existing);
   });
 
   it('index', async () => {
@@ -88,7 +88,7 @@ describe('test statuses CRUD', () => {
   });
 
   it('delete', async () => {
-    const params = testData.statuses.existing;
+    const params = testData.statuses.existingEmpty;
     const { id } = await models.status.query().findOne({ name: params.name });
 
     const response = await app.inject({
