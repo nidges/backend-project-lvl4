@@ -21,7 +21,7 @@ const normalizeReqData = (reqData, initialAcc = {}) => {
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
-      const tasks = await app.objection.models.task.query().withGraphJoined('[status, creator, executor]');
+      const tasks = await app.objection.models.task.query().withGraphJoined('[status, creator, executor]').orderBy('id');
       reply.render('tasks/index', { tasks });
       return reply;
     })
@@ -94,21 +94,6 @@ export default (app) => {
         });
         return reply;
       }
-      // } catch (e) {
-      //   console.log('errors--->', e);
-      //   if (_.get(e.data, 'statusId[0].message') === 'must be number') {
-      //     e.data.statusId[0].message = 'please provide a status';
-      //   }
-      //
-      //   const statuses = await app.objection.models.status.query();
-      //   const executors = await app.objection.models.user.query();
-      //
-      //   req.flash('error', i18next.t('flash.tasks.update.error'));
-      //   reply.render('tasks/update', {
-      //     task: { id, ...req.body.data }, statuses, executors, errors: e.data,
-      //   });
-      //   return reply;
-      // }
     })
     .delete('/tasks/:id', { preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
