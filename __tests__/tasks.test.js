@@ -36,6 +36,22 @@ describe('test tasks CRUD', () => {
     expect(response.statusCode).toBe(200);
   });
 
+  it('filter', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('tasks'),
+      query: {
+        status: '1',
+        executor: '1',
+        label: '1',
+        isCreatorUser: 'on'
+      },
+      cookies,
+    });
+
+    expect(response.statusCode).toBe(200);
+  });
+
   it('view', async () => {
     const { id } = await models.task.query().findOne('id', '>', 0);
     const response = await app.inject({

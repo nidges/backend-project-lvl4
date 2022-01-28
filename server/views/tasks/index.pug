@@ -2,6 +2,30 @@ extends ../layouts/application
 
 block content
     a.nav-link(href=route('newTask'))= text('views.tasks.new.create')
+    .card.border-0.mb-5
+        .card-body.p-2.bg-primary
+            form(action=route('tasks') method='get')
+                .row
+                    .col
+                        .mb-3
+                            +select(query, statuses, 'status', errors)(name="status")
+                    .col
+                        .mb-3
+                            +select(query, executors, 'executor', errors)(name="executor")
+                    .col
+                        .mb-3
+                            +select(query, labels, 'label', errors)(name="label")
+                .mb-3.form-check
+                    input.form-check-input(
+                        name="isCreatorUser"
+                        type="checkbox"
+                        id="data_isCreatorUser"
+                    )(checked=query.isCreatorUser)
+                    label.form-check-label(
+                        for="data_isCreatorUser"
+                    )= getLabel('isCreator')
+                +submit()(value=text('views.users.show') class="btn-success")
+
     table.table.table-striped.table-hover.table-primary
         thead
             tr

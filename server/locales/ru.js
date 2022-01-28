@@ -114,6 +114,7 @@ module.exports = {
           delete: 'Удалить',
           updateTitle: 'Изменение пользователя',
         },
+        show: 'Показать',
       },
       statuses: {
         id: 'ID',
@@ -178,6 +179,10 @@ module.exports = {
       executorId: 'Исполнитель',
       createdAt: 'Дата создания',
       labels: 'Метки',
+      isCreator: 'Только мои задачи',
+      status: 'Статус',
+      executor: 'Исполнитель',
+      label: 'Метка',
     },
   },
 };
