@@ -69,10 +69,13 @@ export default (app) => {
       const { labels: reqLabels, ...rest } = req.body.data;
       const normalizedReqData = normalizeReqData(rest, { creatorId });
 
+      console.log('reqLabels--->', reqLabels);
       try {
         const { task } = app.objection.models;
         await task.transaction(async (trx) => {
           const thisTask = await task.query(trx).insert(normalizedReqData);
+          console.log('reqLabels--->', reqLabels);
+          console.log('[...reqLabels]--->', [...reqLabels]);
           const promises = [...reqLabels].map((label) => thisTask
             .$relatedQuery('labels', trx)
             .relate(Number(label)));
