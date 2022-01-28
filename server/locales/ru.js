@@ -106,7 +106,7 @@ module.exports = {
         createdAt: 'Дата создания',
         empty: 'Нет зарегистрированных пользователей',
         new: {
-          submit: 'Сохранить',
+          submit: 'Создать',
           signUp: 'Регистрация',
         },
         existing: {
