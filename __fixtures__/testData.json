@@ -44,20 +44,37 @@
       "name": "this is a new task",
       "description": "some description",
       "statusId": 1,
-      "executorId": 1
+      "executorId": 1,
+      "labels": [1, 2]
     },
     "existing": {
       "name": "finish the project",
       "description": "4 steps left",
       "statusId": 2,
       "creatorId": 2,
-      "executorId": 1
+      "executorId": 1,
+      "labels": [3]
     },
     "updated": {
       "name": "finish the project ASAP!!!",
       "description": "4 steps left",
       "statusId": 2,
-      "executorId": 1
+      "executorId": 1,
+      "labels": [1, 2, 3]
+    }
+  },
+  "labels": {
+    "new": {
+      "name": "this is a new label"
+    },
+    "existing": {
+      "name": "old label"
+    },
+    "updated": {
+      "name": "old label upd"
+    },
+    "existingEmpty": {
+      "name": "label without tasks"
     }
   }
 }

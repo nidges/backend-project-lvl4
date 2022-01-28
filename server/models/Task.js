@@ -55,7 +55,7 @@ export default class Task extends Model {
           from: 'tasks.id',
           through: {
             from: 'labels_tasks.task_id',
-            to: 'labels_tasks.label_id'
+            to: 'labels_tasks.label_id',
           },
           to: 'labels.id',
         },

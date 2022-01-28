@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import getApp from '../server/index.js';
 import { authenticate, getTestData, prepareData } from './helpers';
 
-describe('test tasks CRUD', () => {
+describe('test labels CRUD', () => {
   let app;
   let knex;
   let models;
@@ -20,8 +19,6 @@ describe('test tasks CRUD', () => {
     // перед каждым тестом выполняем миграции
     // и заполняем БД тестовыми данными
     await knex.migrate.latest();
-    // можно и так, но это не отделяет полностью папку тестов от остального проекта
-    // await knex.seed.run();
     await prepareData(app);
     cookies = await authenticate(app, testData.users.existing);
   });
@@ -29,18 +26,7 @@ describe('test tasks CRUD', () => {
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('tasks'),
-      cookies,
-    });
-
-    expect(response.statusCode).toBe(200);
-  });
-
-  it('view', async () => {
-    const { id } = await models.task.query().findOne('id', '>', 0);
-    const response = await app.inject({
-      method: 'GET',
-      url: app.reverse('viewTask', { id }),
+      url: app.reverse('labels'),
       cookies,
     });
 
@@ -50,7 +36,7 @@ describe('test tasks CRUD', () => {
   it('new', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newTask'),
+      url: app.reverse('newLabel'),
       cookies,
     });
 
@@ -58,10 +44,10 @@ describe('test tasks CRUD', () => {
   });
 
   it('create', async () => {
-    const params = testData.tasks.new;
+    const params = testData.labels.new;
     const response = await app.inject({
       method: 'POST',
-      url: app.reverse('tasks'),
+      url: app.reverse('labels'),
       payload: {
         data: params,
       },
@@ -70,30 +56,26 @@ describe('test tasks CRUD', () => {
 
     expect(response.statusCode).toBe(302);
 
-    const task = await models.task.query().findById(4);
-    expect(task).toMatchObject(_.omit(params, 'labels'));
-
-    const labels = await task.$relatedQuery('labels');
-    const expectedLabels = await models.label.query().findByIds(params.labels);
-    expect(labels).toMatchObject(expectedLabels);
+    const label = await models.label.query().findOne({ name: params.name });
+    expect(label).toMatchObject(params);
   });
 
   it('update', async () => {
-    const oldParams = testData.tasks.existing;
-    const newParams = testData.tasks.updated;
+    const oldParams = testData.labels.existing;
+    const newParams = testData.labels.updated;
     // findOne выдает один объект, where выдает массив объектов
-    const { id } = await models.task.query().findOne('name', oldParams.name);
+    const { id } = await models.label.query().findOne({ name: oldParams.name });
 
     const responseForm = await app.inject({
       method: 'GET',
-      url: app.reverse('updateTaskForm', { id }),
+      url: app.reverse('updateLabelForm', { id }),
       cookies,
     });
     expect(responseForm.statusCode).toBe(200);
 
     const responseUpdate = await app.inject({
       method: 'PATCH',
-      url: app.reverse('updateTask', { id }),
+      url: app.reverse('updateLabel', { id }),
       payload: {
         data: newParams,
       },
@@ -101,27 +83,23 @@ describe('test tasks CRUD', () => {
     });
     expect(responseUpdate.statusCode).toBe(302);
 
-    const task = await models.task.query().findById(id);
-    expect(task).toMatchObject(_.omit(newParams, 'labels'));
-
-    const labels = await task.$relatedQuery('labels');
-    const expectedLabels = await models.label.query().findByIds(newParams.labels);
-    expect(labels).toEqual(expectedLabels);
+    const label = await models.label.query().findById(id);
+    expect(label).toMatchObject(newParams);
   });
 
   it('delete', async () => {
-    const params = testData.tasks.existing;
-    const { id } = await models.task.query().findOne('name', params.name);
+    const params = testData.labels.existingEmpty;
+    const { id } = await models.label.query().findOne({ name: params.name });
 
     const response = await app.inject({
       method: 'DELETE',
-      url: app.reverse('updateTask', { id }),
+      url: app.reverse('updateLabel', { id }),
       cookies,
     });
 
     expect(response.statusCode).toBe(302);
 
-    expect(await models.task.query().findById(id)).toBeUndefined();
+    expect(await models.label.query().findById(id)).toBeUndefined();
   });
 
   afterEach(async () => {

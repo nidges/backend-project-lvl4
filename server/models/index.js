@@ -8,5 +8,5 @@ export default [
   User,
   Status,
   Task,
-  Label
+  Label,
 ];
