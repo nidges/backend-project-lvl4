@@ -1,13 +1,22 @@
 #!/usr/bin/env node
 
 import getApp from '../index.js';
+import Rollbar from 'rollbar';
 
 const port = process.env.PORT || 5000;
 const address = '0.0.0.0';
 const fastify = getApp();
 
+const rollbar = new Rollbar({
+  accessToken: process.env.ROLLBAR_TOKEN,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  logLevel: 'debug',
+});
+
 fastify.listen(port, address, (err) => {
   if (err) {
+    rollbar.error(err);
     fastify.log.error(err);
     process.exit(1);
   }
