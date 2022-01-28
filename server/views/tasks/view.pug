@@ -22,6 +22,12 @@ block content
                     .col= task.createdAt
                 .row.p-1
                     .col
+                        h6= getLabel('labels')
+                        ul
+                            each label in task.labels
+                                li= label.name
+                .row.p-1
+                    .col
                         a(href=route('updateTaskForm', {id: task.id}))= text('views.tasks.existing.update')
                         +buttonTo(route('updateTask', {id: task.id}), 'delete')(class='btn btn-link' value=text('views.tasks.existing.delete'))
 

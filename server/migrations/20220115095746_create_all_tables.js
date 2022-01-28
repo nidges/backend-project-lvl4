@@ -35,6 +35,16 @@ exports.up = (knex) => (
             table.integer('executor_id').references('users.id');
             table.timestamps(true, true);
         })
+        .createTable('labels', (table) => {
+            table.increments();
+            table.string('name');
+            table.timestamps(true, true);
+        })
+        .createTable('labels_tasks', (table) => {
+            table.increments();
+            table.integer('label_id').references('labels.id');
+            table.integer('task_id').references('tasks.id');
+        })
 );
 
 
@@ -42,7 +52,9 @@ exports.up = (knex) => (
 // knex migrate:rollback --all
 exports.down = (knex) => (
     knex.schema
+        .dropTableIfExists('labels_tasks')
         .dropTableIfExists('tasks')
+        .dropTableIfExists('labels')
         .dropTableIfExists('users')
         .dropTableIfExists('statuses')
 );

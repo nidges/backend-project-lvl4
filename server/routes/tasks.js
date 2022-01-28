@@ -11,6 +11,7 @@ const normalizeReqData = (reqData, initialAcc = {}) => {
     statusId: normalizeId,
     executorId: normalizeId,
     creatorId: normalizeId,
+    // labels: (value) => [...value].map(item => ({ id: Number(item) }))
   };
   return entries.reduce((acc, [key, value]) => ({
     [key]: normalizers[key](value),
@@ -29,75 +30,104 @@ export default (app) => {
       const task = new app.objection.models.task();
       const statuses = await app.objection.models.status.query();
       const executors = await app.objection.models.user.query();
-      reply.render('tasks/new', { task, statuses, executors });
+      const labels = await app.objection.models.label.query();
+      reply.render('tasks/new', { task, statuses, executors, labels });
       return reply;
     })
     .get('/tasks/:id', { name: 'viewTask', preValidation: app.authenticate }, async (req, reply) => {
-      const task = await app.objection.models.task.query().findById(req.params.id).withGraphJoined('[status, creator, executor]');
+      const task = await app.objection.models.task.query().findById(req.params.id).withGraphJoined('[status, creator, executor, labels]');
       reply.render('tasks/view', { task });
       return reply;
     })
     .post('/tasks', { preValidation: app.authenticate }, async (req, reply) => {
       const creatorId = req.user.id;
-      const normalizedReqData = normalizeReqData(req.body.data, { creatorId });
+      const { labels, ...rest } = req.body.data;
+      const normalizedReqData = normalizeReqData(rest, { creatorId });
+
       try {
-        const task = await app.objection.models.task.fromJson(normalizedReqData);
-        await app.objection.models.task.query().insertGraph(task, { relate: true });
+        const { task } = app.objection.models;
+        await task.transaction(async trx => {
+          const thisTask = await task.query(trx).insert(normalizedReqData);
+          for (let label of [...labels]) {
+            await thisTask
+                  .$relatedQuery('labels', trx)
+                  .relate(Number(label))
+          }
+        })
 
         req.flash('info', i18next.t('flash.tasks.create.success'));
         return reply.redirect(app.reverse('tasks'));
-      } catch ({ data }) {
-        console.log('errors--->', data);
-        if (_.get(data, 'statusId[0].message') === 'must be number') {
-          data.statusId[0].message = 'please provide a status';
+      } catch (e) {
+        console.log('errors--->', e);
+        if (_.get(e.data, 'statusId[0].message') === 'must be number') {
+          e.data.statusId[0].message = 'please provide a status';
         }
 
         const statuses = await app.objection.models.status.query();
         const executors = await app.objection.models.user.query();
+        const labels = await app.objection.models.label.query();
 
         req.flash('error', i18next.t('flash.tasks.create.error'));
         reply.render('tasks/new', {
-          task: req.body.data, statuses, executors, errors: data,
+          task: req.body.data, statuses, executors, labels, errors: e.data,
         });
         return reply;
       }
     })
     .get('/tasks/:id/edit', { name: 'updateTaskForm', preValidation: app.authenticate }, async (req, reply) => {
-      const task = await app.objection.models.task.query().findById(req.params.id).withGraphJoined('[status, creator, executor]');
+      const task = await app.objection.models.task.query().findById(req.params.id).withGraphJoined('[status, creator, executor, labels]');
+      // console.log('task.labels--->', task.labels);
       const statuses = await app.objection.models.status.query();
       const executors = await app.objection.models.user.query();
-      reply.render('tasks/update', { task, statuses, executors });
+      const labels = await app.objection.models.label.query();
+      reply.render('tasks/update', { task, statuses, executors, labels });
       return reply;
     })
     .patch('/tasks/:id', { name: 'updateTask', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
-      try {
-        const task = await app.objection.models.task.query().findById(id);
-        const { creatorId } = task;
-        const normalizedReqData = normalizeReqData(req.body.data, { creatorId });
+      const { task } = app.objection.models;
+      const thisTask = await task.query().findById(id);
+      const { creatorId } = thisTask;
+      const { labels, ...rest } = req.body.data;
+      const normalizedReqData = normalizeReqData(rest, { creatorId });
 
-        await task.$query().patch(normalizedReqData);
+      try {
+        await task.transaction(async trx => {
+          await thisTask
+              .$relatedQuery('labels', trx)
+              .unrelate()
+          await thisTask.$query(trx).patch(normalizedReqData);
+          for (let label of [...labels]) {
+            await thisTask
+                .$relatedQuery('labels', trx)
+                .relate(Number(label))
+          }
+        })
+
         req.flash('info', i18next.t('flash.tasks.update.success'));
         return reply.redirect(app.reverse('tasks'));
-      } catch ({ data }) {
-        console.log('errors--->', data);
-        if (_.get(data, 'statusId[0].message') === 'must be number') {
-          data.statusId[0].message = 'please provide a status';
+      } catch (e) {
+        console.log('errors--->', e);
+        if (_.get(e.data, 'statusId[0].message') === 'must be number') {
+          e.data.statusId[0].message = 'please provide a status';
         }
 
         const statuses = await app.objection.models.status.query();
         const executors = await app.objection.models.user.query();
+        const labels = await app.objection.models.label.query();
 
         req.flash('error', i18next.t('flash.tasks.update.error'));
         reply.render('tasks/update', {
-          task: { id, ...req.body.data }, statuses, executors, errors: data,
+          task: { id, ...req.body.data }, statuses, executors, labels, errors: e.data,
         });
         return reply;
       }
     })
     .delete('/tasks/:id', { preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
-      const { creatorId } = await app.objection.models.task.query().findById(id);
+      const { task } = app.objection.models;
+      const thisTask = await task.query().findById(id);
+      const { creatorId } = thisTask;
 
       if (req.user.id !== creatorId) {
         req.flash('error', i18next.t('flash.tasks.delete.fail'));
@@ -105,7 +135,13 @@ export default (app) => {
       }
 
       try {
-        await app.objection.models.task.query().deleteById(id);
+        await task.transaction(async trx => {
+          await thisTask
+              .$relatedQuery('labels', trx)
+              .unrelate();
+          await thisTask.$query(trx).delete();
+        })
+        // await app.objection.models.task.query().deleteById(id);
 
         req.flash('info', i18next.t('flash.tasks.delete.success'));
         return reply.redirect(app.reverse('tasks'));

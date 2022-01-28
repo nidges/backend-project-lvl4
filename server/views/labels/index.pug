@@ -1,0 +1,24 @@
+extends ../layouts/application
+
+block content
+    a.nav-link(href=route('newLabel'))= text('views.labels.new.create')
+    table.table.table-striped.table-hover.table-primary
+        thead
+            tr
+                th= text('views.labels.id')
+                th= text('views.labels.name')
+                th= text('views.labels.createdAt')
+                th
+            tbody
+                each label in labels
+                    tr
+                        td= label.id
+                        td= label.name
+                        td= label.createdAt
+                        td
+                            a(href=route('updateLabelForm', { id: label.id }))= text('views.labels.existing.update')
+                            +buttonTo(route('updateLabel', { id: label.id }), 'delete')(class='btn btn-link' value=text('views.labels.existing.delete'))
+
+                else
+                    tr
+                        td.text-center(colspan='4')= text('views.labels.empty')

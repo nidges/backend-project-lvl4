@@ -4,6 +4,18 @@
 - getInputName = (property) => `data[${property}]`
 - getInputId = (property) => `data_${property}`
 - isSelected = (property, selectionId) => Number(property) === selectionId
+// - isSelectedLabel = (task, labelId) => (_.get(task, 'labels', [])).includes(labelId.toString())
+-
+    isSelectedLabel = (task, labelId) => {
+        let labels = [..._.get(task, 'labels', [])];
+        labels = labels.map(label => {
+            if (_.isObject(label)) return label.id;
+            else return Number(label);
+        })
+
+        return labels.includes(labelId);
+    }
+
 
 mixin input(entity, propertyName, errors = {})
     // - getInputName = (property) => `data[${property}]`
@@ -50,9 +62,13 @@ mixin select(entity, selection, propertyName, errors = {})
             name=getInputName(propertyName)
             class=classLine
         )&attributes(attributes)
-            option
+            if propertyName!=='labels'
+                option
             each item in selection
-                option(value=item.id selected=isSelected(entity[propertyName], item.id))= item.name
+                if propertyName==='labels'
+                    option(value=item.id selected=isSelectedLabel(task, item.id))= item.name
+                else
+                    option(value=item.id selected=isSelected(entity[propertyName], item.id))= item.name
         if !_.isEmpty(propertyErrors)
             .invalid-feedback= propertyErrors.map(({message}) => message).join('. ')
 

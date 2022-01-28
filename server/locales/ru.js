@@ -56,12 +56,27 @@ module.exports = {
           fail: 'Задачу может удалить только её автор',
         },
       },
+      labels: {
+        create: {
+          success: 'Метка успешно создана',
+          error: 'Не удалось создать метку',
+        },
+        update: {
+          success: 'Метка успешно изменена',
+          error: 'Не удалось изменить метку',
+        },
+        delete: {
+          success: 'Метка успешно удалена',
+          error: 'Не удалось удалить метку',
+        },
+      },
     },
     layouts: {
       application: {
         users: 'Пользователи',
         statuses: 'Статусы',
         tasks: 'Задачи',
+        labels: 'Метки',
         signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выход',
@@ -134,6 +149,22 @@ module.exports = {
           updateTitle: 'Изменение задачи',
         },
       },
+      labels: {
+        id: 'ID',
+        name: 'Наименование',
+        createdAt: 'Дата создания',
+        empty: 'Нет созданных меток',
+        new: {
+          create: 'Создать метку',
+          creation: 'Создание метки',
+          submit: 'Создать',
+        },
+        existing: {
+          update: 'Изменить',
+          delete: 'Удалить',
+          updateTitle: 'Изменение метки',
+        },
+      },
     },
     labels: {
       email: 'Email',
@@ -146,6 +177,7 @@ module.exports = {
       creatorId: 'Автор',
       executorId: 'Исполнитель',
       createdAt: 'Дата создания',
+      labels: 'Метки',
     },
   },
 };
