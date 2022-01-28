@@ -45,7 +45,7 @@ block content
                         td= task.status.name
                         td= task.creator.name
                         td= _.get(task.executor, 'name', '')
-                        td= task.createdAt
+                        td= formatDate(task.createdAt)
                         td
                             a(href=route('updateTaskForm', { id: task.id }))= text('views.tasks.existing.update')
                             +buttonTo(route('updateTask', { id: task.id }), 'delete')(class='btn btn-link' value=text('views.tasks.existing.delete'))

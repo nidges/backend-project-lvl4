@@ -14,7 +14,7 @@ block content
                     tr
                         td= status.id
                         td= status.name
-                        td= status.createdAt
+                        td= formatDate(status.createdAt)
                         td
                             a(href=route('updateStatusForm', { id: status.id }))= text('views.statuses.existing.update')
                             +buttonTo(route('updateStatus', { id: status.id }), 'delete')(class='btn btn-link' value=text('views.statuses.existing.delete'))

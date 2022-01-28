@@ -14,7 +14,7 @@ block content
                     tr
                         td= label.id
                         td= label.name
-                        td= label.createdAt
+                        td= formatDate(label.createdAt)
                         td
                             a(href=route('updateLabelForm', { id: label.id }))= text('views.labels.existing.update')
                             +buttonTo(route('updateLabel', { id: label.id }), 'delete')(class='btn btn-link' value=text('views.labels.existing.delete'))

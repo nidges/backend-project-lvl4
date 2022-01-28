@@ -19,7 +19,7 @@ block content
                     .col= task.status.name
                 .row.p-1
                     .col= getLabel('createdAt')
-                    .col= task.createdAt
+                    .col= formatDate(task.createdAt)
                 .row.p-1
                     .col
                         h6= getLabel('labels')

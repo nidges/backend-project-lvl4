@@ -16,7 +16,7 @@ block content
                         //td= user.firstName + ' ' + user.lastName
                         td= user.name
                         td= user.email
-                        td= user.createdAt
+                        td= formatDate(user.createdAt)
                         td
                             a(href=route('updateUserForm', { id: user.id }))= text('views.users.existing.update')
                             +buttonTo(route('updateUser', { id: user.id }), 'delete')(class='btn btn-link' value=text('views.users.existing.delete'))
