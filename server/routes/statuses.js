@@ -30,8 +30,6 @@ export default (app) => {
       return reply;
     })
     .patch('/statuses/:id', { name: 'updateStatus', preValidation: app.authenticate }, async (req, reply) => {
-      // console.log('req.body.data---->', req.body.data);
-      // console.log('req.params.id--->', req.params.id);
       const { id } = req.params;
 
       try {

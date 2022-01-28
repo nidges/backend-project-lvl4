@@ -1,10 +1,3 @@
-//mixin formFor(entity = null)
-//    form&attributes(attributes)
-//        block
-- getInputName = (property) => `data[${property}]`
-- getInputId = (property) => `data_${property}`
-- isSelected = (property, selectionId) => Number(property) === selectionId
-// - isSelectedLabel = (task, labelId) => (_.get(task, 'labels', [])).includes(labelId.toString())
 -
     isSelectedLabel = (task, labelId) => {
         let labels = [..._.get(task, 'labels', [])];
@@ -16,10 +9,11 @@
         return labels.includes(labelId);
     }
 
+- getInputName = (property) => `data[${property}]`
+- getInputId = (property) => `data_${property}`
+- isSelected = (property, selectionId) => Number(property) === selectionId
 
 mixin input(entity, propertyName, errors = {})
-    // - getInputName = (property) => `data[${property}]`
-    // - getInputId = (property) => `data_${property}`
     - propertyErrors = _.get(errors, propertyName)
     - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
     - inputId = getInputId(propertyName)

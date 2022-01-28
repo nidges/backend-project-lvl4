@@ -3,12 +3,10 @@ const knexSnakeCaseMappers = require('objection');
 const dotenv = require('dotenv');
 
 dotenv.config();
-// console.log('process.env.DATABASE_URL', process.env.DATABASE_URL);
 
 const migrations = {
   directory: path.join(__dirname, 'server', 'migrations'),
 };
-// console.log('migrations', migrations.directory);
 
 const getSeeds = (env) => ({
   directory: path.join(__dirname, 'server', 'seeds', env),
@@ -33,7 +31,6 @@ module.exports = {
     migrations,
     // debug: true,
     ...knexSnakeCaseMappers,
-    // seeds: getSeeds('test'),
   },
   production: {
     client: 'pg',
@@ -46,13 +43,9 @@ module.exports = {
       // host: process.env.DB_HOST,
       // port: process.env.DB_PORT,
     },
-    // connectionString: process.env.DATABASE_URL,
     useNullAsDefault: true,
     migrations,
     seeds: getSeeds('production'),
     ...knexSnakeCaseMappers,
-    // ssl: { rejectUnauthorized: false },
-    // ssl: false,
-    // ?sslmode=require
   },
 };

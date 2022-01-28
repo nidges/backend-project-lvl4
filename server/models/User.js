@@ -3,13 +3,7 @@ import objectionUnique from 'objection-unique';
 import path from 'path';
 import encrypt from '../lib/secure.js';
 
-// import Ajv from 'ajv';
-// import addFormats from 'ajv-formats';
-
 const unique = objectionUnique({ fields: ['email'] });
-
-// const ajv = new Ajv()
-// addFormats(ajv, ["email"])
 
 export default class User extends unique(Model) {
   static get tableName() {
@@ -25,7 +19,6 @@ export default class User extends unique(Model) {
         // email: { type: 'string', format: 'email' },
         // email: { type: 'string', minLength: 5, pattern: '^\\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$' },
         email: { type: 'string', minLength: 5, pattern: '\\S+@\\S+\\.\\S+' },
-        // email: { type: 'string', minLength: 5},
         password: { type: 'string', minLength: 3 },
         firstName: { type: 'string', minLength: 1 },
         lastName: { type: 'string', minLength: 1 },
@@ -62,9 +55,6 @@ export default class User extends unique(Model) {
     return encrypt(password) === this.passwordDigest;
   }
 
-  // fullName() {
-  //   return this.firstName + ' ' + this.lastName;
-  // }
   get name() {
     return `${this.firstName} ${this.lastName}`;
   }

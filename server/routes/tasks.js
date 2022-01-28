@@ -11,7 +11,6 @@ const normalizeReqData = (reqData, initialAcc = {}) => {
     statusId: normalizeId,
     executorId: normalizeId,
     creatorId: normalizeId,
-    // labels: (value) => [...value].map(item => ({ id: Number(item) }))
   };
   return entries.reduce((acc, [key, value]) => ({
     [key]: normalizers[key](value),
@@ -22,7 +21,6 @@ const normalizeReqData = (reqData, initialAcc = {}) => {
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
-      console.log('req.query--->', req.query);
       const {
         status, executor, label, isCreatorUser,
       } = req.query;
@@ -73,14 +71,6 @@ export default (app) => {
 
       try {
         const { task } = app.objection.models;
-        // await task.transaction(async (trx) => {
-        //   const thisTask = await task.query(trx).insert(normalizedReqData);
-        //   for (const label of [...labels]) {
-        //     await thisTask
-        //       .$relatedQuery('labels', trx)
-        //       .relate(Number(label));
-        //   }
-        // });
         await task.transaction(async (trx) => {
           const thisTask = await task.query(trx).insert(normalizedReqData);
           const promises = [...reqLabels].map((label) => thisTask
@@ -110,7 +100,6 @@ export default (app) => {
     })
     .get('/tasks/:id/edit', { name: 'updateTaskForm', preValidation: app.authenticate }, async (req, reply) => {
       const task = await app.objection.models.task.query().findById(req.params.id).withGraphJoined('[status, creator, executor, labels]');
-      // console.log('task.labels--->', task.labels);
       const statuses = await app.objection.models.status.query();
       const executors = await app.objection.models.user.query();
       const labels = await app.objection.models.label.query();
@@ -137,11 +126,6 @@ export default (app) => {
             .$relatedQuery('labels', trx)
             .relate(Number(label)));
           await Promise.all(promises);
-          // for (const label of [...reqLabels]) {
-          //   await thisTask
-          //     .$relatedQuery('labels', trx)
-          //     .relate(Number(label));
-          // }
         });
 
         req.flash('info', i18next.t('flash.tasks.update.success'));
@@ -181,7 +165,6 @@ export default (app) => {
             .unrelate();
           await thisTask.$query(trx).delete();
         });
-        // await app.objection.models.task.query().deleteById(id);
 
         req.flash('info', i18next.t('flash.tasks.delete.success'));
         return reply.redirect(app.reverse('tasks'));

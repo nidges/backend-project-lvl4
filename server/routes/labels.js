@@ -3,13 +3,6 @@ import i18next from 'i18next';
 export default (app) => {
   app
     .get('/labels', { name: 'labels', preValidation: app.authenticate }, async (req, reply) => {
-      // const task = await app.objection.models.task.query().findById(1);
-      // console.log('task--->', task);
-      // const label = await app.objection.models.label.query().insert({name: 'testLabel'});
-      // console.log('label--->', label);
-      // await task.$relatedQuery('labels').relate(label.id);
-      // console.log('DONE!');
-
       const labels = await app.objection.models.label.query().orderBy('id');
       reply.render('labels/index', { labels });
       return reply;
@@ -54,7 +47,6 @@ export default (app) => {
     .delete('/labels/:id', { preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const tasksWithLabel = await app.objection.models.label.relatedQuery('tasks').for(id);
-      // console.log('tasksWithLabel---->', tasksWithLabel);
 
       if (tasksWithLabel.length !== 0) {
         req.flash('error', i18next.t('flash.labels.delete.error'));
