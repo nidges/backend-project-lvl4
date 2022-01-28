@@ -143,6 +143,7 @@ module.exports = {
         new: {
           create: 'Создать задачу',
           creation: 'Создание задачи',
+          submit: 'Создать',
         },
         existing: {
           update: 'Изменить',
