@@ -2,12 +2,19 @@ import {
   describe, beforeAll, it, expect,
 } from '@jest/globals';
 import getApp from '../server/index.js';
+import dotenv from 'dotenv';
+import path from 'path';
 
 describe('requests', () => {
   let app;
 
   beforeAll(async () => {
     app = await getApp();
+
+    dotenv.config({ debug: true, path: path.join(__dirname, '..', '.env.example') });
+
+    console.log('process.env.SESSION_KEY inside tests', process.env.SESSION_KEY);
+
   });
 
   it('GET 200', async () => {
