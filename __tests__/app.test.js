@@ -8,7 +8,6 @@ describe('requests', () => {
 
   beforeAll(async () => {
     app = await getApp();
-
   });
 
   it('GET 200', async () => {
