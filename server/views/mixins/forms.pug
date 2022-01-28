@@ -56,8 +56,8 @@ mixin select(entity, selection, propertyName, errors = {})
             name=getInputName(propertyName)
             class=classLine
         )&attributes(attributes)
-            if propertyName!=='labels'
-                option
+            //if propertyName!=='labels'
+            option
             each item in selection
                 if propertyName==='labels'
                     option(value=item.id selected=isSelectedLabel(task, item.id))= item.name
