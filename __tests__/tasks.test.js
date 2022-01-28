@@ -44,7 +44,7 @@ describe('test tasks CRUD', () => {
         status: '1',
         executor: '1',
         label: '1',
-        isCreatorUser: 'on'
+        isCreatorUser: 'on',
       },
       cookies,
     });

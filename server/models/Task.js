@@ -78,6 +78,6 @@ export default class Task extends Model {
 
     filterCreator(query, creatorId) {
       query.where('creatorId', creatorId);
-    }
+    },
   };
 }

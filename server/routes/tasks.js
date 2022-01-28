@@ -23,20 +23,22 @@ export default (app) => {
   app
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
       console.log('req.query--->', req.query);
-      const { status, executor, label, isCreatorUser } = req.query;
+      const {
+        status, executor, label, isCreatorUser,
+      } = req.query;
       const query = app.objection.models.task.query().withGraphJoined('[status, creator, executor, labels]').orderBy('id');
 
       if (status) {
-        query.modify('filterStatus', status)
+        query.modify('filterStatus', status);
       }
       if (executor) {
-        query.modify('filterExecutor', executor)
+        query.modify('filterExecutor', executor);
       }
       if (label) {
-        query.modify('filterLabel', label)
+        query.modify('filterLabel', label);
       }
       if (isCreatorUser) {
-        query.modify('filterCreator', req.user.id)
+        query.modify('filterCreator', req.user.id);
       }
 
       const tasks = await query;
@@ -44,7 +46,9 @@ export default (app) => {
       const statuses = await app.objection.models.status.query();
       const executors = await app.objection.models.user.query();
       const labels = await app.objection.models.label.query();
-      reply.render('tasks/index', { tasks, statuses, executors, labels, query: req.query });
+      reply.render('tasks/index', {
+        tasks, statuses, executors, labels, query: req.query,
+      });
       return reply;
     })
     .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {
