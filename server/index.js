@@ -95,8 +95,6 @@ const registerMainPlugins = (app) => {
   // парсер ниже нужен для вложенных объектов
   app.register(fastifyFormBody, { parser: qs.parse });
 
-  console.log('process.env.SESSION_KEY in fastify plugins--->', process.env.SESSION_KEY);
-
   app.register(fastifySecureSession, {
     secret: process.env.SESSION_KEY,
     cookie: {
