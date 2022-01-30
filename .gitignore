@@ -5,13 +5,9 @@ dist/
 testing-requests.http
 myfile.js
 
-build/
-tmp/
-temp/
 database.sqlite
 .env
 
 # Ignore test-related files
 /coverage.data
 /coverage/
-server/seeds/test/

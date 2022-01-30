@@ -18,7 +18,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.statuses.create.success'));
         return reply.redirect(app.reverse('statuses'));
       } catch ({ data }) {
-        console.log('errors--->', data);
         req.flash('error', i18next.t('flash.statuses.create.error'));
         reply.render('statuses/new', { status: req.body.data, errors: data });
         return reply;
@@ -38,7 +37,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.statuses.update.success'));
         return reply.redirect(app.reverse('statuses'));
       } catch ({ data }) {
-        console.log('errors--->', data);
         reply.render('statuses/update', { status: { id, ...req.body.data }, errors: data });
         return reply;
       }
@@ -58,7 +56,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.statuses.delete.success'));
         return reply.redirect(app.reverse('statuses'));
       } catch (err) {
-        console.log('errors---->', err);
         req.flash('error', i18next.t('flash.statuses.delete.error'));
         return reply.redirect(app.reverse('statuses'));
       }

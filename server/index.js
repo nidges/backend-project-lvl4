@@ -62,7 +62,6 @@ const registerStaticPlugin = (app) => {
   app.register(fastifyStatic, {
     root: pathPublic,
     prefix: '/assets/',
-    list: true,
   });
 };
 

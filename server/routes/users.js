@@ -19,7 +19,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.users.create.success'));
         return reply.redirect(app.reverse('root'));
       } catch ({ data }) {
-        console.log('errors--->', data);
         if (_.get(data, 'email[0].keyword') === 'pattern') {
           data.email[0].message = 'please provide a valid email';
         }
@@ -47,7 +46,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.users.update.success'));
         return reply.redirect(app.reverse('users'));
       } catch ({ data }) {
-        console.log('errors--->', data);
         if (_.get(data, 'email[0].keyword') === 'pattern') {
           data.email[0].message = 'please provide a valid email';
         }
@@ -78,7 +76,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.users.delete.success'));
         return reply.redirect(app.reverse('users'));
       } catch (err) {
-        console.log('errors---->', err);
         req.flash('error', i18next.t('flash.users.delete.fail'));
         return reply.redirect(app.reverse('users'));
       }

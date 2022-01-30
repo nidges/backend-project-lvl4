@@ -19,7 +19,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.labels.create.success'));
         return reply.redirect(app.reverse('labels'));
       } catch ({ data }) {
-        console.log('errors--->', data);
         req.flash('error', i18next.t('flash.labels.create.error'));
         reply.render('labels/new', { label: req.body.data, errors: data });
         return reply;
@@ -39,7 +38,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.labels.update.success'));
         return reply.redirect(app.reverse('labels'));
       } catch ({ data }) {
-        console.log('errors--->', data);
         reply.render('labels/update', { label: { id, ...req.body.data }, errors: data });
         return reply;
       }
@@ -59,7 +57,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.labels.delete.success'));
         return reply.redirect(app.reverse('labels'));
       } catch (err) {
-        console.log('errors---->', err);
         req.flash('error', i18next.t('flash.labels.delete.error'));
         return reply.redirect(app.reverse('labels'));
       }

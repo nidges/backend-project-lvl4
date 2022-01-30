@@ -18,6 +18,12 @@ const normalizeReqData = (reqData, initialAcc = {}) => {
   }), initialAcc);
 };
 
+const getGraphPromises = (app) => ([
+  app.objection.models.status.query(),
+  app.objection.models.user.query(),
+  app.objection.models.label.query(),
+]);
+
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
@@ -40,10 +46,8 @@ export default (app) => {
       }
 
       const tasks = await query;
+      const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
 
-      const statuses = await app.objection.models.status.query();
-      const executors = await app.objection.models.user.query();
-      const labels = await app.objection.models.label.query();
       reply.render('tasks/index', {
         tasks, statuses, executors, labels, query: req.query,
       });
@@ -51,9 +55,8 @@ export default (app) => {
     })
     .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {
       const task = new app.objection.models.task();
-      const statuses = await app.objection.models.status.query();
-      const executors = await app.objection.models.user.query();
-      const labels = await app.objection.models.label.query();
+      const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
+
       reply.render('tasks/new', {
         task, statuses, executors, labels,
       });
@@ -83,14 +86,11 @@ export default (app) => {
         req.flash('info', i18next.t('flash.tasks.create.success'));
         return reply.redirect(app.reverse('tasks'));
       } catch (e) {
-        console.log('errors--->', e);
         if (_.get(e.data, 'statusId[0].message') === 'must be number') {
           e.data.statusId[0].message = 'please provide a status';
         }
 
-        const statuses = await app.objection.models.status.query();
-        const executors = await app.objection.models.user.query();
-        const labels = await app.objection.models.label.query();
+        const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
 
         req.flash('error', i18next.t('flash.tasks.create.error'));
         reply.render('tasks/new', {
@@ -101,9 +101,8 @@ export default (app) => {
     })
     .get('/tasks/:id/edit', { name: 'updateTaskForm', preValidation: app.authenticate }, async (req, reply) => {
       const task = await app.objection.models.task.query().findById(req.params.id).withGraphJoined('[status, creator, executor, labels]');
-      const statuses = await app.objection.models.status.query();
-      const executors = await app.objection.models.user.query();
-      const labels = await app.objection.models.label.query();
+      const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
+
       reply.render('tasks/update', {
         task, statuses, executors, labels,
       });
@@ -132,14 +131,11 @@ export default (app) => {
         req.flash('info', i18next.t('flash.tasks.update.success'));
         return reply.redirect(app.reverse('tasks'));
       } catch (e) {
-        console.log('errors--->', e);
         if (_.get(e.data, 'statusId[0].message') === 'must be number') {
           e.data.statusId[0].message = 'please provide a status';
         }
 
-        const statuses = await app.objection.models.status.query();
-        const executors = await app.objection.models.user.query();
-        const labels = await app.objection.models.label.query();
+        const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
 
         req.flash('error', i18next.t('flash.tasks.update.error'));
         reply.render('tasks/update', {
@@ -170,7 +166,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.tasks.delete.success'));
         return reply.redirect(app.reverse('tasks'));
       } catch (err) {
-        console.log('errors---->', err);
         req.flash('error', i18next.t('flash.tasks.delete.error'));
         return reply.redirect(app.reverse('tasks'));
       }
