@@ -1,22 +1,22 @@
 import i18next from 'i18next';
 import _ from 'lodash';
 
-const normalizeReqData = (reqData, initialAcc = {}) => {
-  const entries = Object.entries(reqData);
-  const normalizeText = (value) => value;
-  const normalizeId = (value) => (value ? Number(value) : null);
-  const normalizers = {
-    name: normalizeText,
-    description: normalizeText,
-    statusId: normalizeId,
-    executorId: normalizeId,
-    creatorId: normalizeId,
-  };
-  return entries.reduce((acc, [key, value]) => ({
-    [key]: normalizers[key](value),
-    ...acc,
-  }), initialAcc);
-};
+// const normalizeReqData = (reqData, initialAcc = {}) => {
+//   const entries = Object.entries(reqData);
+//   const normalizeText = (value) => value;
+//   const normalizeId = (value) => (value ? Number(value) : null);
+//   const normalizers = {
+//     name: normalizeText,
+//     description: normalizeText,
+//     statusId: normalizeId,
+//     executorId: normalizeId,
+//     creatorId: normalizeId,
+//   };
+//   return entries.reduce((acc, [key, value]) => ({
+//     [key]: normalizers[key](value),
+//     ...acc,
+//   }), initialAcc);
+// };
 
 const getGraphPromises = (app) => ([
   app.objection.models.status.query(),
@@ -69,15 +69,23 @@ export default (app) => {
     })
     .post('/tasks', { preValidation: app.authenticate }, async (req, reply) => {
       const creatorId = req.user.id;
-      req.body.data.labels = req.body.data.labels ?? [];
-      const { labels: reqLabels, ...rest } = req.body.data;
-      const normalizedReqData = normalizeReqData(rest, { creatorId });
+      // req.body.data.labels = req.body.data.labels ?? [];
+        req.body.data.labels = req.body.data.labels ? [...req.body.data.labels] : [];
+      // const { labels: reqLabels, ...rest } = req.body.data;
+      //   const { labels: reqLabels } = req.body.data;
+      // const normalizedReqData = normalizeReqData(rest, { creatorId });
+      // console.log('normalizedReqData', normalizedReqData);
 
       try {
-        const { task } = app.objection.models;
+          const { task } = app.objection.models;
+          const newTask = task.fromJson({...req.body.data, creatorId });
+          // console.log('newTask', newTask);
         await task.transaction(async (trx) => {
-          const thisTask = await task.query(trx).insert(normalizedReqData);
-          const promises = [...reqLabels].map((label) => thisTask
+          const thisTask = await task.query(trx).insert(newTask);
+          // console.log('thisTask', thisTask);
+          //   const promises = [...reqLabels].map((label) => thisTask
+          //   console.log('req.body.data.labels', req.body.data.labels);
+          const promises = req.body.data.labels.map((label) => thisTask
             .$relatedQuery('labels', trx)
             .relate(Number(label)));
           await Promise.all(promises);
@@ -86,10 +94,10 @@ export default (app) => {
         req.flash('info', i18next.t('flash.tasks.create.success'));
         return reply.redirect(app.reverse('tasks'));
       } catch (e) {
-        if (_.get(e.data, 'statusId[0].message') === 'must be number') {
-          e.data.statusId[0].message = 'please provide a status';
-        }
-
+        // if (_.get(e.data, 'statusId[0].message') === 'must be number') {
+        //   e.data.statusId[0].message = 'please provide a status';
+        // }
+// console.log(e);
         const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
 
         req.flash('error', i18next.t('flash.tasks.create.error'));
@@ -113,16 +121,21 @@ export default (app) => {
       const { task } = app.objection.models;
       const thisTask = await task.query().findById(id);
       const { creatorId } = thisTask;
-      const { labels: reqLabels, ...rest } = req.body.data;
-      const normalizedReqData = normalizeReqData(rest, { creatorId });
+      // const { labels: reqLabels, ...rest } = req.body.data;
+      // const normalizedReqData = normalizeReqData(rest, { creatorId });
+        req.body.data.labels = req.body.data.labels ? [...req.body.data.labels] : [];
 
-      try {
+
+        try {
+          const thisTaskUpd = task.fromJson({...req.body.data, creatorId });
         await task.transaction(async (trx) => {
           await thisTask
             .$relatedQuery('labels', trx)
             .unrelate();
-          await thisTask.$query(trx).patch(normalizedReqData);
-          const promises = [...reqLabels].map((label) => thisTask
+          await thisTask.$query(trx).patch(thisTaskUpd);
+          // await thisTask.$query(trx).patch(normalizedReqData);
+          // const promises = [...reqLabels].map((label) => thisTask
+          const promises = req.body.data.labels.map((label) => thisTask
             .$relatedQuery('labels', trx)
             .relate(Number(label)));
           await Promise.all(promises);
@@ -131,9 +144,9 @@ export default (app) => {
         req.flash('info', i18next.t('flash.tasks.update.success'));
         return reply.redirect(app.reverse('tasks'));
       } catch (e) {
-        if (_.get(e.data, 'statusId[0].message') === 'must be number') {
-          e.data.statusId[0].message = 'please provide a status';
-        }
+        // if (_.get(e.data, 'statusId[0].message') === 'must be number') {
+        //   e.data.statusId[0].message = 'please provide a status';
+        // }
 
         const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
 

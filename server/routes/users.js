@@ -18,12 +18,13 @@ export default (app) => {
         await app.objection.models.user.query().insert(user);
         req.flash('info', i18next.t('flash.users.create.success'));
         return reply.redirect(app.reverse('root'));
-      } catch ({ data }) {
-        if (_.get(data, 'email[0].keyword') === 'pattern') {
-          data.email[0].message = 'please provide a valid email';
-        }
+      } catch (e) {
+        // if (_.get(data, 'email[0].keyword') === 'pattern') {
+        //   data.email[0].message = 'please provide a valid email';
+        // }
+        // console.log(e);
         req.flash('error', i18next.t('flash.users.create.error'));
-        reply.render('users/new', { user: req.body.data, errors: data });
+        reply.render('users/new', { user: req.body.data, errors: e.data });
         return reply;
       }
     })
@@ -46,9 +47,9 @@ export default (app) => {
         req.flash('info', i18next.t('flash.users.update.success'));
         return reply.redirect(app.reverse('users'));
       } catch ({ data }) {
-        if (_.get(data, 'email[0].keyword') === 'pattern') {
-          data.email[0].message = 'please provide a valid email';
-        }
+        // if (_.get(data, 'email[0].keyword') === 'pattern') {
+        //   data.email[0].message = 'please provide a valid email';
+        // }
         reply.render('users/update', { user: { id, ...req.body.data }, errors: data });
         return reply;
       }

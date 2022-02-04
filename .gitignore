@@ -12,3 +12,4 @@ server/seeds/production/
 # Ignore test-related files
 /coverage.data
 /coverage/
+MyCustomValidationError.js
