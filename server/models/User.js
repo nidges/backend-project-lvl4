@@ -2,7 +2,6 @@ import { Model } from 'objection';
 import objectionUnique from 'objection-unique';
 import path from 'path';
 import encrypt from '../lib/secure.js';
-// import MyCustomValidationError from "../../MyCustomValidationError";
 
 const unique = objectionUnique({ fields: ['email'] });
 
@@ -59,8 +58,4 @@ export default class User extends unique(Model) {
   get name() {
     return `${this.firstName} ${this.lastName}`;
   }
-
-  // static createValidationError({ type, message, data }) {
-  //   return new MyCustomValidationError({ type, message, modelClass: this, data });
-  // }
 }

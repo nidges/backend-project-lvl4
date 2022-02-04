@@ -1,6 +1,5 @@
 import { Model } from 'objection';
 import path from 'path';
-// import MyCustomValidationError from "../../MyCustomValidationError.js";
 
 export default class Task extends Model {
   static get tableName() {
@@ -64,29 +63,13 @@ export default class Task extends Model {
   }
 
   $parseJson(json, opt) {
-    // Remember to call the super class's implementation.
-    json = super.$parseJson(json, opt);
-    // Do your conversion here.
+    const newJson = super.$parseJson(json, opt);
     return {
-      ...json,
-      executorId: Number(json.executorId) || null,
-      statusId: Number(json.statusId) || null,
+      ...newJson,
+      executorId: Number(newJson.executorId) || null,
+      statusId: Number(newJson.statusId) || null,
     };
   }
-
-  // static createValidationError({ type, message, data }) {
-  //   return new MyCustomValidationError({ type, message, modelClass: this, data });
-  // }
-
-  // $beforeInsert() {
-  //   if (this.id) {
-  //     throw new objection.ValidationError({
-  //       message: 'identifier should not be defined before insert',
-  //       type: 'MyCustomError',
-  //       data: someObjectWithSomeData
-  //     });
-  //   }
-  // }
 
   static modifiers = {
     filterStatus(query, statusId) {
