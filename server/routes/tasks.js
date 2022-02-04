@@ -67,6 +67,9 @@ export default (app) => {
         req.flash('info', i18next.t('flash.tasks.create.success'));
         return reply.redirect(app.reverse('tasks'));
       } catch (e) {
+        if (e.type === 'ModelValidation' && e.data.statusId) {
+          e.data.statusId[0].message = 'please provide a status';
+        }
         const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
 
         req.flash('error', i18next.t('flash.tasks.create.error'));
@@ -108,6 +111,9 @@ export default (app) => {
         req.flash('info', i18next.t('flash.tasks.update.success'));
         return reply.redirect(app.reverse('tasks'));
       } catch (e) {
+        if (e.type === 'ModelValidation' && e.data.statusId) {
+          e.data.statusId[0].message = 'please provide a status';
+        }
         const [statuses, executors, labels] = await Promise.all(getGraphPromises(app));
 
         req.flash('error', i18next.t('flash.tasks.update.error'));
