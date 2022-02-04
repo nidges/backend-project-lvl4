@@ -18,7 +18,7 @@ export default class User extends unique(Model) {
         id: { type: 'integer' },
         // email: { type: 'string', format: 'email' },
         // email: { type: 'string', minLength: 5, pattern: '^\\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$' },
-        email: { type: 'string', minLength: 5, pattern: '\\S+@\\S+\\.\\S+' },
+        email: { type: 'string', pattern: '\\S+@\\S+\\.\\S+' },
         password: { type: 'string', minLength: 3 },
         firstName: { type: 'string', minLength: 1 },
         lastName: { type: 'string', minLength: 1 },

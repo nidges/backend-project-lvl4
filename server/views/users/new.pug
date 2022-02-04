@@ -5,9 +5,9 @@ block header
 
 block content
     form(action=route('users') method='post')
-        +input(user, 'email', errors)(type="email" required="required")
-        +input(user, 'password', errors)(type="password" required="required")
-        +input(user, 'firstName', errors)(type="text" required="required")
-        +input(user, 'lastName', errors)(type="text" required="required")
+        +input(user, 'email', errors)(type="email")
+        +input(user, 'password', errors)(type="password")
+        +input(user, 'firstName', errors)(type="text")
+        +input(user, 'lastName', errors)(type="text")
         +submit(user)(value=text('views.users.new.submit'))
 
