@@ -1,3 +1,4 @@
+A simple task manager. Authenticate to see all functions :)
 https://nidges-task-manager.herokuapp.com/
 
 ### Hexlet tests and linter status:
